@@ -49,7 +49,7 @@ export default function TopBar(props) {
                     <MenuIcon />
                 </IconButton>
                 <Typography className={classes.title} variant="h6">
-                    {props.page}
+                    {props.title}
                 </Typography>
                 <Button color="inherit">
                     Connect
