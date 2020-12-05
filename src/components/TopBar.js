@@ -51,7 +51,10 @@ export default function TopBar(props) {
                 <Typography className={classes.title} variant="h6">
                     {props.title}
                 </Typography>
-                <Button color="inherit">
+                <Button
+                    color="inherit"
+                    onClick={props.handleConnect}
+                >
                     Connect
                 </Button>
             </Toolbar>

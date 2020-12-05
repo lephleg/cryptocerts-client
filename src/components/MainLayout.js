@@ -4,6 +4,8 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import TopBar from "./TopBar";
 import SlideDrawer from "./SlideDrawer";
 import Content from './Content';
+import ConnectDialog from './ConnectDialog';
+import CustomAlert from './CustomAlert';
 
 const drawerWidth = 240;
 
@@ -34,6 +36,7 @@ export default function MainLayout(props) {
                 drawerWidth={drawerWidth}
                 drawerOpen={drawerOpen}
                 handleOpenClick={handleDrawerOpen}
+                handleConnect={props.handleConnect}
             />
             <SlideDrawer
                 drawerWidth={drawerWidth}
@@ -46,6 +49,15 @@ export default function MainLayout(props) {
             >
                 {props.children}
             </Content>
+            <ConnectDialog
+                connectDialogOpen={props.connectDialogOpen}
+            />
+            <CustomAlert
+                alertOpen={props.alertOpen}
+                handleAlertOpen={props.handleAlertOpen}
+                handleAlertClose={props.handleAlertClose}
+                alertMessage={props.alertMessage}
+            />
         </div>
     );
 }
