@@ -33,7 +33,7 @@ export default function Home(props) {
                     <CardMedia className={classes.ethLogo} image={ethereum_logo} title="Ethereum diamond" />
                     <Box pt={4} pb={8} textAlign="center">
                         <Typography variant="overline" component="span">Welcome to CryptoCerts</Typography>
-                        <Typography variant="h3" component="h2">A decentralized academic certificate registry for the Web 3</Typography>
+                        <Typography variant="h3" component="h2">A decentralized academic certificate registry for the Web3</Typography>
                         <Box mt={4}>
                             <Button color="primary" endIcon={<ArrowRightAltIcon />}>Validate a document</Button>
                         </Box>
