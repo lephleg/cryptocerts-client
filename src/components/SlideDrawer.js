@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { DrawerContext } from './MainLayout';
 import { Link } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -36,11 +37,11 @@ const useStyles = makeStyles((theme) => ({
     display: 'none',
   },
   drawer: {
-    width: props => props.drawerWidth,
+    width: drawerContext => drawerContext.width,
     flexShrink: 0,
   },
   drawerPaper: {
-    width: props => props.drawerWidth
+    width: drawerContext => drawerContext.width
   },
   drawerHeader: {
     display: 'flex',
@@ -53,20 +54,22 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SlideDrawer(props) {
-  const classes = useStyles(props);
+
+  const drawerContext = useContext(DrawerContext);
+  const classes = useStyles(drawerContext);
 
   return (
     <Drawer
       className={classes.drawer}
       variant="persistent"
       anchor="left"
-      open={props.drawerOpen}
+      open={drawerContext.open}
       classes={{
         paper: classes.drawerPaper,
       }}
     >
       <div className={classes.drawerHeader}>
-        <IconButton onClick={props.handleCloseClick}>
+        <IconButton onClick={drawerContext.setClosed}>
           <ChevronLeftIcon />
         </IconButton>
       </div>

@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { DrawerContext } from './MainLayout';
 import clsx from "clsx"
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -19,8 +20,8 @@ const useStyles = makeStyles((theme) => ({
         }),
     },
     appBarShift: {
-        width: props => `calc(100% - ${props.drawerWidth}px)`,
-        marginLeft: props => props.drawerWidth,
+        width: drawerContext => `calc(100% - ${drawerContext.width}px)`,
+        marginLeft: drawerContext => drawerContext.width,
         transition: theme.transitions.create(['margin', 'width'], {
             easing: theme.transitions.easing.easeOut,
             duration: theme.transitions.duration.enteringScreen,
@@ -37,17 +38,18 @@ const useStyles = makeStyles((theme) => ({
 export default function TopBar(props) {
 
     const appName = 'CryptoCerts';
-    const classes = useStyles(props);
+    const drawerContext = useContext(DrawerContext);
+    const classes = useStyles(drawerContext);
 
     return (
-        <AppBar color="primary" position="fixed" className={clsx(classes.appBar, { [classes.appBarShift]: props.drawerOpen })}>
+        <AppBar color="primary" position="fixed" className={clsx(classes.appBar, { [classes.appBarShift]: drawerContext.open })}>
             <Toolbar>
                 <IconButton
                     edge="start"
-                    className={clsx(classes.menuButton, props.drawerOpen && classes.hide)}
+                    className={clsx(classes.menuButton, drawerContext.open && classes.hide)}
                     color="inherit"
                     aria-label="menu"
-                    onClick={props.handleOpenClick}
+                    onClick={drawerContext.setOpen}
                 >
                     <MenuIcon />
                 </IconButton>

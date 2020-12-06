@@ -7,7 +7,14 @@ import Content from './Content';
 import ConnectDialog from './ConnectDialog';
 import CustomAlert from './CustomAlert';
 
-const drawerWidth = 240;
+const DRAWER_WIDTH = 240;
+
+export const DrawerContext = React.createContext({
+    width: DRAWER_WIDTH,
+    open: false,
+    setOpen: () => { },
+    setClosed: () => { }
+});
 
 const useStyles = makeStyles({
     root: {
@@ -28,27 +35,23 @@ export default function MainLayout(props) {
         setOpen(false);
     };
 
+    const drawerContext = {
+        width: DRAWER_WIDTH,
+        open: drawerOpen,
+        setOpen: handleDrawerOpen,
+        setClosed: handleDrawerClose
+    }
+
     return (
         <div className={classes.root}>
             <CssBaseline />
-            <TopBar
-                title={props.title}
-                drawerWidth={drawerWidth}
-                drawerOpen={drawerOpen}
-                handleOpenClick={handleDrawerOpen}
-                handleConnect={props.handleConnect}
-            />
-            <SlideDrawer
-                drawerWidth={drawerWidth}
-                drawerOpen={drawerOpen}
-                handleCloseClick={handleDrawerClose}
-            />
-            <Content
-                drawerWidth={drawerWidth}
-                drawerOpen={drawerOpen}
-            >
-                {props.children}
-            </Content>
+            <DrawerContext.Provider value={drawerContext}>
+                <TopBar handleConnect={props.handleConnect} />
+                <SlideDrawer />
+                <Content>
+                    {props.children}
+                </Content>
+            </DrawerContext.Provider>
             <ConnectDialog
                 connectDialogOpen={props.connectDialogOpen}
             />

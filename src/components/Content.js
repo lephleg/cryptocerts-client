@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { DrawerContext } from './MainLayout';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -18,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
         }),
-        marginLeft: props => -props.drawerWidth,
+        marginLeft: drawerContext => -drawerContext.width,
     },
     contentShift: {
         transition: theme.transitions.create('margin', {
@@ -26,16 +27,18 @@ const useStyles = makeStyles((theme) => ({
             duration: theme.transitions.duration.enteringScreen,
         }),
         // needed in order to be merged with content rule
-        marginLeft: props => 0,
+        marginLeft: drawerContext => 0,
     }
 }));
 
 export default function Content(props) {
-    const classes = useStyles(props);
+
+    const drawerContext = useContext(DrawerContext);
+    const classes = useStyles(drawerContext);
 
     return (
         <main className={clsx(classes.content, {
-            [classes.contentShift]: props.drawerOpen,
+            [classes.contentShift]: drawerContext.open,
         })}>
             <div className={classes.drawerHeader} />
             {props.children}
