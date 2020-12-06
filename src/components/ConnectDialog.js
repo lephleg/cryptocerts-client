@@ -20,12 +20,12 @@ export default function ConnectDialog(props) {
                 <Box textAlign={"center"}>{"Confirm connection in MetaMask"}</Box>
             </DialogTitle>
             <DialogContent>
-                <DialogContentText id="alert-dialog-description">
-                    <Box textAlign={"center"} >
+                <Box textAlign={"center"} >
+                    <DialogContentText id="alert-dialog-description">
                         Confirm the request that's just appeared. If you can't see a request, open your MetaMask extension via your browser.
+                        </DialogContentText>
                     <Box my={3}><CircularProgress thickness={5} /></Box>
-                    </Box>
-                </DialogContentText>
+                </Box>
             </DialogContent>
         </Dialog>
     );
