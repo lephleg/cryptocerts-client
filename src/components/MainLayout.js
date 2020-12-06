@@ -6,7 +6,7 @@ import TopBar from "./TopBar";
 import SlideDrawer from "./SlideDrawer";
 import Content from './Content';
 import ConnectDialog from './ConnectDialog';
-import CustomAlert from './CustomAlert';
+import Notification from './Notification';
 
 const useStyles = makeStyles({
     root: {
@@ -29,12 +29,7 @@ export default function MainLayout(props) {
             <ConnectDialog
                 connectDialogOpen={props.connectDialogOpen}
             />
-            <CustomAlert
-                alertOpen={props.alertOpen}
-                handleAlertOpen={props.handleAlertOpen}
-                handleAlertClose={props.handleAlertClose}
-                alertMessage={props.alertMessage}
-            />
+            <Notification />
         </div>
     );
 }

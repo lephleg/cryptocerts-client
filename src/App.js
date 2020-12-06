@@ -1,4 +1,5 @@
-import React, { lazy, Suspense, useEffect } from 'react';
+import React, { lazy, Suspense, useContext, useEffect } from 'react';
+import { NotificationContext } from './common/NotificationContextProvider';
 import Web3 from 'web3';
 import Web3Utils from './utils/web3-utils';
 import { BrowserRouter as Router } from "react-router-dom";
@@ -30,14 +31,13 @@ function BackDrop() {
   );
 }
 
-
 export default function App() {
   let web3;
 
   const [readyForWeb3, setReadyForWeb3] = React.useState(false);
   const [connectDialogOpen, setConnectDialogOpen] = React.useState(false);
-  const [alertOpen, setAlertOpen] = React.useState(false);
-  const [alertMessage, setAlertMessage] = React.useState('');
+
+  const { showMessage } = useContext(NotificationContext);
 
   useEffect(() => {
     let ready = Web3Utils.browserIsWeb3Capable() && Web3Utils.hasWeb3Available();
@@ -60,29 +60,18 @@ export default function App() {
     web3.eth.requestAccounts()
       .then(() => {
         setConnectDialogOpen(false);
-        setAlertMessage('Connected!');
-        setAlertOpen(true);
+        showMessage('Connected!');
       })
       .catch((error) => {
         console.error(error);
       });;
   }
 
-  const handleAlertClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setAlertOpen(false);
-  };
-
   return (
     <Router>
       <MainLayout
         handleConnect={handleConnect}
         connectDialogOpen={connectDialogOpen}
-        alertOpen={alertOpen}
-        alertMessage={alertMessage}
-        handleAlertClose={handleAlertClose}
       >
         <Switch>
           <Suspense fallback={<BackDrop />}>
