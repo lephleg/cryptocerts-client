@@ -9,8 +9,8 @@ import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles } from '@material-ui/core';
 import MainLayout from './components/MainLayout';
+import Home from './components/Home';
 
-const Home = lazy(() => import('./components/Home'));
 const ValidatePage = lazy(() => import('./components/ValidatePage'));
 const InstitutionsPage = lazy(() => import('./components/InstitutionsPage'));
 
