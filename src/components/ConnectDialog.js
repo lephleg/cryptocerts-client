@@ -12,7 +12,7 @@ export default function ConnectDialog(props) {
             open={props.connectDialogOpen}
             disableBackdropClick={true}
             disableEscapeKeyDown={true}
-            transitionDuration={400}
+            transitionDuration={800}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
         >
