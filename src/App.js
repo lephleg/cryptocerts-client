@@ -13,8 +13,6 @@ const Home = lazy(() => import('./components/Home'));
 const ValidatePage = lazy(() => import('./components/ValidatePage'));
 const InstitutionsPage = lazy(() => import('./components/InstitutionsPage'));
 
-const appName = 'CryptoCerts';
-
 const useStyles = makeStyles((theme) => ({
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
@@ -80,7 +78,6 @@ export default function App() {
   return (
     <Router>
       <MainLayout
-        title={appName}
         handleConnect={handleConnect}
         connectDialogOpen={connectDialogOpen}
         alertOpen={alertOpen}

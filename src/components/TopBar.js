@@ -35,7 +35,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function TopBar(props) {
+
+    const appName = 'CryptoCerts';
     const classes = useStyles(props);
+
     return (
         <AppBar color="primary" position="fixed" className={clsx(classes.appBar, { [classes.appBarShift]: props.drawerOpen })}>
             <Toolbar>
@@ -49,7 +52,7 @@ export default function TopBar(props) {
                     <MenuIcon />
                 </IconButton>
                 <Typography className={classes.title} variant="h6">
-                    {props.title}
+                    {appName}
                 </Typography>
                 <Button
                     color="inherit"
