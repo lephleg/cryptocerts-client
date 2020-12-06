@@ -1,15 +1,37 @@
-import React, { useEffect } from 'react';
+import React, { lazy, Suspense, useEffect } from 'react';
 import Web3 from 'web3';
 import Web3Utils from './utils/web3-utils';
 import { BrowserRouter as Router } from "react-router-dom";
 import { Switch } from "react-router-dom";
 import { Route } from "react-router-dom";
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { makeStyles } from '@material-ui/core';
 import MainLayout from './components/MainLayout';
-import Home from './components/Home';
-import ValidatePage from './components/ValidatePage';
-import InstitutionsPage from './components/InstitutionsPage';
+
+const Home = lazy(() => import('./components/Home'));
+const ValidatePage = lazy(() => import('./components/ValidatePage'));
+const InstitutionsPage = lazy(() => import('./components/InstitutionsPage'));
 
 const appName = 'CryptoCerts';
+
+const useStyles = makeStyles((theme) => ({
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: '#fff',
+  },
+}));
+
+function BackDrop() {
+  const classes = useStyles();
+
+  return (
+    <Backdrop className={classes.backdrop} open={true} >
+      <CircularProgress color="inherit" />
+    </Backdrop>
+  );
+}
+
 
 export default function App() {
   let web3;
@@ -66,15 +88,17 @@ export default function App() {
         handleAlertClose={handleAlertClose}
       >
         <Switch>
-          <Route exact path="/">
-            <Home />
-          </Route>
-          <Route path="/institutions">
-            <InstitutionsPage />
-          </Route>
-          <Route path="/validate">
-            <ValidatePage />
-          </Route>
+          <Suspense fallback={<BackDrop />}>
+            <Route exact path="/" >
+              <Home />
+            </Route>
+            <Route path="/institutions">
+              <InstitutionsPage />
+            </Route>
+            <Route path="/validate">
+              <ValidatePage />
+            </Route>
+          </Suspense>
         </Switch>
       </MainLayout>
     </Router>
