@@ -60,7 +60,7 @@ export default function App() {
     web3.eth.requestAccounts()
       .then(() => {
         setConnectDialogOpen(false);
-        showMessage('Connected!');
+        showMessage("You are connected!");
       })
       .catch((error) => {
         console.error(error);
