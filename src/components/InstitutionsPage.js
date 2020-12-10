@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import { makeStyles } from '@material-ui/core';
+import { Box, makeStyles } from '@material-ui/core';
 import { fetchInstitutions, selectAllInstitutions } from '../features/institutions/institutionsSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -26,20 +26,20 @@ export default function InstitutionsPage() {
     let institutions = useSelector(selectAllInstitutions);
 
     const renderedInstitutions = institutions.map((institution => {
-        return <Typography variant="body1" component="p" key={institution.id}>{institution.name}</Typography>
+        return <Typography variant="body1" component="p" key={institution.id}>{institution.id} - {institution.name}</Typography>
     }))
 
     return (
         <Fragment>
             <section>
-                <Container maxWidth="md" className={classes.title}>
-                    <Typography variant="h3" component="h2">Institutions</Typography>
-                </Container>
+                <Box className={classes.title}>
+                    <Typography variant="h5" component="h5">Institutions</Typography>
+                </Box>
             </section>
             <section>
-                <Container maxWidth="md">
+                <Box>
                     {renderedInstitutions}
-                </Container>
+                </Box>
             </section>
         </Fragment>
     );

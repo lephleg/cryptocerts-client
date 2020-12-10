@@ -15,7 +15,7 @@ export default function ValidatePage(props) {
     return (
         <section>
             <Container maxWidth="md" className={classes.title}>
-                <Typography variant="h3" component="h2">Validate a document</Typography>
+                <Typography variant="h5" component="h5">Validate a document</Typography>
             </Container>
         </section>
     );

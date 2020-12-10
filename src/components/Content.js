@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { DrawerContext } from '../context/DrawerProvider';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
+import { Container } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
     drawerHeader: {
@@ -41,7 +42,9 @@ export default function Content(props) {
             [classes.contentShift]: drawerContext.open,
         })}>
             <div className={classes.drawerHeader} />
-            {props.children}
+            <Container maxWidth='lg'>
+                {props.children}
+            </Container>
         </main>
     );
 }
