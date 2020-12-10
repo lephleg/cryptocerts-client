@@ -35,10 +35,22 @@ export const fetchInstitutions = createAsyncThunk('institutions/fetchInstitution
     return Promise.all(promises);
 })
 
+export function saveNewInstitution(name, address) {
+    return async function saveNewInstitutionThunk(dispatch, getState) {
+        const activeAccount = getState().connection.activeAccount;
+        const response = await contract.methods.createInstitution(name, address).send({ from: activeAccount });
+        // dispatch(institutionCreated(response.id, response.name, response.address));
+    }
+}
+
 const institutionsSlice = createSlice({
-    name: 'insituttions',
+    name: 'institutions',
     initialState,
-    reducers: {},
+    reducers: {
+        // institutionCreated(state, action) {
+        //     institutionsAdapter.upsertMany(state, action.payload)
+        // }
+    },
     extraReducers: {
         [fetchInstitutions.pending]: (state, action) => {
             state.status = 'loading'
@@ -52,7 +64,9 @@ const institutionsSlice = createSlice({
             state.error = action.payload
         }
     },
-})
+});
+
+export const { institutionCreated } = institutionsSlice.actions;
 
 export default institutionsSlice.reducer;
 

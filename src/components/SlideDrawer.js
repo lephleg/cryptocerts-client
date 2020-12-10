@@ -13,6 +13,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 import HomeIcon from '@material-ui/icons/Home';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 
 function ListItemLink(props) {
   const { icon, primary, to } = props;
@@ -80,7 +81,8 @@ export default function SlideDrawer(props) {
       <Divider />
       <List>
         <ListItemLink key={2} to="/institutions" primary="Institutions" icon={<AccountBalanceIcon />} />
-        <ListItemLink key={3} to="/validate" primary="Validate" icon={<VerifiedUserIcon />} />
+        <ListItemLink key={3} to="/create-institution" primary="Create Institution" icon={<AddCircleIcon />} />
+        <ListItemLink key={4} to="/validate" primary="Validate" icon={<VerifiedUserIcon />} />
       </List>
     </Drawer>
   );

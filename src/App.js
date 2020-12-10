@@ -8,6 +8,7 @@ import Spinner from './components/Spinner';
 
 const ValidatePage = lazy(() => import('./components/ValidatePage'));
 const InstitutionsPage = lazy(() => import('./components/InstitutionsPage'));
+const InstitutionForm = lazy(() => import('./components/InstitutionForm'));
 
 export default function App() {
 
@@ -21,6 +22,9 @@ export default function App() {
             </Route>
             <Route path="/institutions">
               <InstitutionsPage />
+            </Route>
+            <Route path="/create-institution">
+              <InstitutionForm />
             </Route>
             <Route path="/validate">
               <ValidatePage />
