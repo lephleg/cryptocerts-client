@@ -1,5 +1,5 @@
 import React from 'react';
-import DrawerContextProvider from '../common/DrawerContextProvider'
+import DrawerProvider from '../context/DrawerProvider'
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TopBar from "./TopBar";
@@ -19,16 +19,14 @@ export default function MainLayout(props) {
     return (
         <div className={classes.root}>
             <CssBaseline />
-            <DrawerContextProvider>
-                <TopBar handleConnect={props.handleConnect} />
+            <DrawerProvider>
+                <TopBar />
                 <SlideDrawer />
                 <Content>
                     {props.children}
                 </Content>
-            </DrawerContextProvider>
-            <ConnectDialog
-                connectDialogOpen={props.connectDialogOpen}
-            />
+            </DrawerProvider>
+            <ConnectDialog />
             <Notification />
         </div>
     );

@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { DrawerContext } from '../common/DrawerContextProvider';
+import { DrawerContext } from '../context/DrawerProvider';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 

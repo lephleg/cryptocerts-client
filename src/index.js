@@ -4,17 +4,24 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { ThemeProvider, unstable_createMuiStrictModeTheme } from '@material-ui/core/styles';
-import NotificationContextProvider from './common/NotificationContextProvider';
+import NotificationsProvider from './context/NotificationsProvider';
+import ConnectionProvider from './context/ConnectionProvider';
+import { Provider as ReduxProvider } from 'react-redux';
+import store from './store';
 
 const theme = unstable_createMuiStrictModeTheme();
 
 ReactDOM.render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <NotificationContextProvider>
-        <App />
-      </NotificationContextProvider>
-    </ThemeProvider>
+    <ReduxProvider store={store}>
+      <ThemeProvider theme={theme}>
+        <NotificationsProvider>
+          <ConnectionProvider>
+            <App />
+          </ConnectionProvider>
+        </NotificationsProvider>
+      </ThemeProvider>
+    </ReduxProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

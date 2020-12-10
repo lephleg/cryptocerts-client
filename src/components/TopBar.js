@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { DrawerContext } from '../common/DrawerContextProvider';
+import { DrawerContext } from '../context/DrawerProvider';
 import clsx from "clsx"
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import MenuIcon from '@material-ui/icons/Menu';
+import { ConnectionContext } from '../context/ConnectionProvider';
 
 const useStyles = makeStyles((theme) => ({
     title: {
@@ -35,11 +36,11 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function TopBar(props) {
-
+export default function TopBar() {
     const appName = 'CryptoCerts';
     const drawerContext = useContext(DrawerContext);
     const classes = useStyles(drawerContext);
+    const { handleConnect } = useContext(ConnectionContext);
 
     return (
         <AppBar color="primary" position="fixed" className={clsx(classes.appBar, { [classes.appBarShift]: drawerContext.open })}>
@@ -58,7 +59,7 @@ export default function TopBar(props) {
                 </Typography>
                 <Button
                     color="inherit"
-                    onClick={props.handleConnect}
+                    onClick={handleConnect}
                 >
                     Connect
                 </Button>

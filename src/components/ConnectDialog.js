@@ -1,15 +1,18 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import { ConnectionContext } from '../context/ConnectionProvider';
 
-export default function ConnectDialog(props) {
+export default function ConnectDialog() {
+    const { connectDialogOpen } = useContext(ConnectionContext);
+
     return (
         <Dialog
-            open={props.connectDialogOpen}
+            open={connectDialogOpen}
             disableBackdropClick={true}
             disableEscapeKeyDown={true}
             transitionDuration={800}

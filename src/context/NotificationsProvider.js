@@ -1,13 +1,13 @@
 import React from 'react';
 
-export const NotificationContext = React.createContext({
+export const NotificationsContext = React.createContext({
     message: '',
     open: false,
     showMessage: () => { },
     hideMessage: () => { }
 });
 
-export default function NotificationContextProvider({ children }) {
+export default function NotificationsProvider({ children }) {
 
     const [notificationOpen, setNotificationOpen] = React.useState(false);
     const [notificationMessage, setNotificationMessage] = React.useState('');
@@ -33,8 +33,8 @@ export default function NotificationContextProvider({ children }) {
     }
 
     return (
-        <NotificationContext.Provider value={notificationContext}>
+        <NotificationsContext.Provider value={notificationContext}>
             {children}
-        </NotificationContext.Provider>
+        </NotificationsContext.Provider>
     );
 }

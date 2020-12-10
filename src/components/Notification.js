@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
 import Snackbar from '@material-ui/core/Snackbar';
-import { NotificationContext } from '../common/NotificationContextProvider';
+import { NotificationsContext } from '../context/NotificationsProvider';
 
 export default function Notification() {
-  const notificationContext = useContext(NotificationContext);
+  const notificationContext = useContext(NotificationsContext);
 
   return (
     <Snackbar

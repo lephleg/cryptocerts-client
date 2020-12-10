@@ -9,7 +9,7 @@ export const DrawerContext = React.createContext({
     setClosed: () => { }
 });
 
-export default function DrawerContextProvider({ children }) {
+export default function DrawerProvider({ children }) {
 
     const [drawerOpen, setOpen] = React.useState(false);
 
