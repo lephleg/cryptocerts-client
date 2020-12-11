@@ -14,16 +14,17 @@ import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 import HomeIcon from '@material-ui/icons/Home';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
+import { useSelector } from 'react-redux';
 
 function ListItemLink(props) {
-  const { icon, primary, to } = props;
+  const { icon, primary, to, hide } = props;
 
   const renderLink = React.useMemo(
     () => React.forwardRef((itemProps, ref) => <Link to={to} ref={ref} {...itemProps} />),
     [to],
   );
 
-  return (
+  const renderedListItem = (
     <li>
       <ListItem button component={renderLink} >
         {icon ? <ListItemIcon>{icon}</ListItemIcon> : null}
@@ -31,6 +32,8 @@ function ListItemLink(props) {
       </ListItem>
     </li>
   );
+
+  return !hide ? renderedListItem : null;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -58,6 +61,7 @@ export default function SlideDrawer(props) {
 
   const drawerContext = useContext(DrawerContext);
   const classes = useStyles(drawerContext);
+  const connectedStatus = useSelector((state) => state.connection.connected);
 
   return (
     <Drawer
@@ -81,7 +85,7 @@ export default function SlideDrawer(props) {
       <Divider />
       <List>
         <ListItemLink key={2} to="/institutions" primary="Institutions" icon={<AccountBalanceIcon />} />
-        <ListItemLink key={3} to="/create-institution" primary="Create Institution" icon={<AddCircleIcon />} />
+        <ListItemLink hide={!connectedStatus} key={3} to="/create-institution" primary="Create Institution" icon={<AddCircleIcon />} />
         <ListItemLink key={4} to="/validate" primary="Validate" icon={<VerifiedUserIcon />} />
       </List>
     </Drawer>
