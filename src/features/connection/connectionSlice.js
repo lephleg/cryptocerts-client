@@ -6,20 +6,34 @@ export const connectionSlice = createSlice({
         web3Capable: false,
         connected: false,
         activeAccount: '',
+        admin: '',
+        role: ''
     },
     reducers: {
         setWeb3Capable: (state, action) => {
-            state.web3Capable = action.payload
+            state.web3Capable = action.payload;
         },
         setConnected: (state, action) => {
-            state.connected = action.payload
+            state.connected = action.payload;
         },
         setActiveAccount: (state, action) => {
-            state.activeAccount = action.payload
-        }
+            state.activeAccount = action.payload;
+        },
+        setAdminAccount: (state, action) => {
+            state.admin = action.payload;
+        },
+        setRole: (state, action) => {
+            state.role = action.payload;
+        },
     }
 })
 
-export const { setWeb3Capable, setConnected, setActiveAccount } = connectionSlice.actions
+export const {
+    setWeb3Capable,
+    setConnected,
+    setActiveAccount,
+    setAdminAccount,
+    setRole
+} = connectionSlice.actions
 
 export default connectionSlice.reducer;
