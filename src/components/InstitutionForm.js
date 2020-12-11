@@ -4,7 +4,7 @@ import Container from '@material-ui/core/Container';
 import { Box, Button, makeStyles } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import { useDispatch } from 'react-redux';
-import { institutionCreated, saveNewInstitution } from '../features/institutions/institutionsSlice';
+import { saveNewInstitution } from '../features/institutions/institutionsSlice';
 import Web3 from 'web3';
 
 const useStyles = makeStyles((theme) => ({

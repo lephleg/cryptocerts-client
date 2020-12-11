@@ -38,8 +38,7 @@ export const fetchInstitutions = createAsyncThunk('institutions/fetchInstitution
 export function saveNewInstitution(name, address) {
     return async function saveNewInstitutionThunk(dispatch, getState) {
         const activeAccount = getState().connection.activeAccount;
-        const response = await contract.methods.createInstitution(name, address).send({ from: activeAccount });
-        // dispatch(institutionCreated(response.id, response.name, response.address));
+        await contract.methods.createInstitution(name, address).send({ from: activeAccount });
     }
 }
 

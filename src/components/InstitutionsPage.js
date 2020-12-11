@@ -1,6 +1,5 @@
 import React, { Fragment, useEffect } from 'react';
 import Typography from '@material-ui/core/Typography';
-import Container from '@material-ui/core/Container';
 import { Box, makeStyles } from '@material-ui/core';
 import { fetchInstitutions, selectAllInstitutions } from '../features/institutions/institutionsSlice';
 import { useDispatch, useSelector } from 'react-redux';
