@@ -61,7 +61,11 @@ export default function SlideDrawer(props) {
 
   const drawerContext = useContext(DrawerContext);
   const classes = useStyles(drawerContext);
-  const connectedStatus = useSelector((state) => state.connection.connected);
+
+  const web3Capable = useSelector((state) => state.connection.web3Capable);
+  const role = useSelector((state) => state.connection.role);
+
+  const isAdmin = role === 'admin';
 
   return (
     <Drawer
@@ -84,9 +88,9 @@ export default function SlideDrawer(props) {
       </List>
       <Divider />
       <List>
-        <ListItemLink key={2} to="/institutions" primary="Institutions" icon={<AccountBalanceIcon />} />
-        <ListItemLink hide={!connectedStatus} key={3} to="/create-institution" primary="Create Institution" icon={<AddCircleIcon />} />
-        <ListItemLink key={4} to="/validate" primary="Validate" icon={<VerifiedUserIcon />} />
+        <ListItemLink hide={!web3Capable} key={2} to="/institutions" primary="Institutions" icon={<AccountBalanceIcon />} />
+        <ListItemLink hide={!isAdmin} key={3} to="/create-institution" primary="Create Institution" icon={<AddCircleIcon />} />
+        <ListItemLink hide={!web3Capable} key={4} to="/validate" primary="Validate" icon={<VerifiedUserIcon />} />
       </List>
     </Drawer>
   );

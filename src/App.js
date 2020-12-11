@@ -21,15 +21,15 @@ export default function App() {
             <Route exact path="/">
               <Home />
             </Route>
-            <Route path="/institutions">
+            <ProtectedRoute path="/institutions" protection="web3">
               <InstitutionsPage />
-            </Route>
-            <ProtectedRoute path="/create-institution">
+            </ProtectedRoute>
+            <ProtectedRoute path="/create-institution" protection="admin">
               <InstitutionForm />
             </ProtectedRoute>
-            <Route path="/validate">
+            <ProtectedRoute path="/validate" protection="web3">
               <ValidatePage />
-            </Route>
+            </ProtectedRoute>
           </Suspense>
         </Switch>
       </MainLayout>
