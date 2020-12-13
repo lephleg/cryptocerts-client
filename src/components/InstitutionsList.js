@@ -10,7 +10,7 @@ const useStyles = makeStyles({
     }
 });
 
-export default function InstitutionsPage() {
+export default function InstitutionsList() {
     const classes = useStyles();
 
     const dispatch = useDispatch();

@@ -10,6 +10,9 @@ import ProtectedRoute from './components/ProtectedRoute';
 const ValidatePage = lazy(() => import('./components/ValidatePage'));
 const InstitutionsList = lazy(() => import('./components/InstitutionsList'));
 const InstitutionForm = lazy(() => import('./components/InstitutionForm'));
+const CertificatesList = lazy(() => import('./components/CertificatesList'));
+const CertificateForm = lazy(() => import('./components/CertificateForm'));
+
 
 export default function App() {
 
@@ -26,6 +29,12 @@ export default function App() {
             </ProtectedRoute>
             <ProtectedRoute path="/create-institution" protection="role" roles={["admin"]}>
               <InstitutionForm />
+            </ProtectedRoute>
+            <ProtectedRoute path="/certificates" protection="role" roles={["institution", "student"]}>
+              <CertificatesList />
+            </ProtectedRoute>
+            <ProtectedRoute path="/create-certificate" protection="role" roles={["institution"]}>
+              <CertificateForm />
             </ProtectedRoute>
             <ProtectedRoute path="/validate" protection="web3">
               <ValidatePage />

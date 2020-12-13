@@ -14,7 +14,9 @@ import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
 import HomeIcon from '@material-ui/icons/Home';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
+import DescriptionIcon from '@material-ui/icons/Description';
 import { useSelector } from 'react-redux';
+import clsx from 'clsx';
 
 function ListItemLink(props) {
   const { icon, primary, to, hide } = props;
@@ -66,6 +68,8 @@ export default function SlideDrawer(props) {
   const role = useSelector((state) => state.connection.role);
 
   const isAdmin = role === 'admin';
+  const isInstitution = role === 'institution';
+  const isInstitutionOrStudent = role === 'institution' || role === 'student';
 
   return (
     <Drawer
@@ -86,11 +90,31 @@ export default function SlideDrawer(props) {
       <List>
         <ListItemLink key={1} to="/" primary="Home" icon={<HomeIcon />} />
       </List>
-      <Divider />
-      <List>
+      <Divider className={clsx({
+        [classes.hide]: !web3Capable || !isAdmin,
+      })} />
+      <List className={clsx({
+        [classes.hide]: !web3Capable && !isAdmin,
+      })}>
         <ListItemLink hide={!web3Capable} key={2} to="/institutions" primary="Institutions" icon={<AccountBalanceIcon />} />
         <ListItemLink hide={!isAdmin} key={3} to="/create-institution" primary="Create Institution" icon={<AddCircleIcon />} />
-        <ListItemLink hide={!web3Capable} key={4} to="/validate" primary="Validate" icon={<VerifiedUserIcon />} />
+      </List>
+      <Divider className={clsx({
+        [classes.hide]: !isInstitutionOrStudent,
+      })} />
+      <List className={clsx({
+        [classes.hide]: !isInstitutionOrStudent,
+      })}>
+        <ListItemLink hide={!isInstitutionOrStudent} key={4} to="/certificates" primary="Certificates" icon={<DescriptionIcon />} />
+        <ListItemLink hide={!isInstitution} key={5} to="/create-certificate" primary="Create Certificate" icon={<AddCircleIcon />} />
+      </List>
+      <Divider className={clsx({
+        [classes.hide]: !web3Capable,
+      })} />
+      <List className={clsx({
+        [classes.hide]: !web3Capable,
+      })}>
+        <ListItemLink hide={!web3Capable} key={6} to="/validate" primary="Validate" icon={<VerifiedUserIcon />} />
       </List>
     </Drawer>
   );

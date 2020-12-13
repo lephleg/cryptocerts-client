@@ -20,12 +20,11 @@ const initialState = institutionsAdapter.getInitialState({
 export const fetchInstitutions = createAsyncThunk('institutions/fetchInstitutions', async (_, thunkAPI) => {
     const activeAccount = thunkAPI.getState().connection.activeAccount;
     const size = await contract.methods.getInstitutionsSize().call({ from: activeAccount })
-
     let promises = [];
     for (let i = 0; i < size; i++) {
         let prom = contract.methods.institutions(i).call({ from: activeAccount }).then((payload) => {
             return {
-                id: i,
+                id: i + 1, // increment id in order to skip zero and match the contract institution id
                 name: payload.name,
                 isValid: payload.isValid
             }

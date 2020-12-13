@@ -8,12 +8,12 @@ import {
     setActiveAccount,
     setWeb3Capable,
     setAdminAccount,
-    setRole
+    determineRole
 } from '../features/connection/connectionSlice';
 import { abi as CryptoCertsAbi } from '../contracts/CryptoCerts.json';
 import { CRYPTOCERTS_CONTRACT_ADDRESS } from '../config';
 import { fetchInstitutions } from '../features/institutions/institutionsSlice';
-import { useSelector } from 'react-redux';
+import { fetchCertificates } from '../features/certificates/certificatesSlice';
 
 export const ConnectionContext = React.createContext({
     connected: false,
@@ -24,7 +24,6 @@ export const ConnectionContext = React.createContext({
 export default function ConnectionProvider(props) {
 
     const dispatch = useDispatch();
-    const adminAccount = useSelector((state) => state.connection.admin);
 
     const [readyForWeb3, setReadyForWeb3] = React.useState(false);
     const [connectDialogOpen, setConnectDialogOpen] = React.useState(false);
@@ -47,10 +46,13 @@ export default function ConnectionProvider(props) {
                 showMessage("A new institution has been created!");
                 dispatch(fetchInstitutions());
             });
-            // store admin account
-            contract.methods.owner().call().then((account) => {
-                dispatch(setAdminAccount(account));
+            contract.events.CertificateCreated({}, (error, event) => {
+                // TODO: avoid showMessage on dependencies
+                showMessage("A new certificate has been issued!");
+                dispatch(fetchCertificates());
             });
+            // store admin account
+            contract.methods.owner().call().then(account => dispatch(setAdminAccount(account)));
         }
         setReadyForWeb3(ready);
         dispatch(setWeb3Capable(ready));
@@ -70,13 +72,14 @@ export default function ConnectionProvider(props) {
         web3.eth.requestAccounts()
             .then((accounts) => {
                 handleConnected(true);
-                handleAccountAndRole(accounts);
+                dispatch(setActiveAccount(accounts));
             })
             .catch((error) => {
                 handleConnected(false);
-                handleAccountAndRole();
+                dispatch(setActiveAccount());
                 console.error(error);
-            });
+            })
+            .finally(dispatch(determineRole()));
     }
 
     function handleConnected(isConnected) {
@@ -87,28 +90,6 @@ export default function ConnectionProvider(props) {
             showMessage("You are connected!");
         }
     }
-
-    function handleAccountAndRole(accounts = []) {
-        let activeAccount = handleActiveAccount(accounts);
-
-        if (activeAccount === adminAccount) {
-            dispatch(setRole('admin'));
-            return;
-        }
-        // TODO: assign other roles by calling ownerToInstitution and studentToCertificates contract functions
-    }
-
-    function handleActiveAccount(accounts) {
-        let activeAccount = '';
-
-        if (accounts.length) {
-            activeAccount = accounts[0];
-        }
-
-        dispatch(setActiveAccount(activeAccount));
-        return activeAccount;
-    }
-
 
     const connectionContext = {
         connected: connected,
