@@ -9,6 +9,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import MenuIcon from '@material-ui/icons/Menu';
 import { ConnectionContext } from '../context/ConnectionProvider';
+import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
     title: {
@@ -40,7 +41,8 @@ export default function TopBar() {
     const appName = 'CryptoCerts';
     const drawerContext = useContext(DrawerContext);
     const classes = useStyles(drawerContext);
-    const { handleConnect } = useContext(ConnectionContext);
+    const { handleConnect, handleDisconnect } = useContext(ConnectionContext);
+    const connected = useSelector((state) => state.connection.connected);
 
     return (
         <AppBar color="primary" position="fixed" className={clsx(classes.appBar, { [classes.appBarShift]: drawerContext.open })}>
@@ -59,9 +61,9 @@ export default function TopBar() {
                 </Typography>
                 <Button
                     color="inherit"
-                    onClick={handleConnect}
+                    onClick={!connected ? handleConnect : handleDisconnect}
                 >
-                    Connect
+                    {!connected ? "Connect" : "Disconnect"}
                 </Button>
             </Toolbar>
         </AppBar>
