@@ -8,7 +8,7 @@ import Spinner from './components/Spinner';
 import ProtectedRoute from './components/ProtectedRoute';
 
 const ValidatePage = lazy(() => import('./components/ValidatePage'));
-const InstitutionsPage = lazy(() => import('./components/InstitutionsPage'));
+const InstitutionsList = lazy(() => import('./components/InstitutionsList'));
 const InstitutionForm = lazy(() => import('./components/InstitutionForm'));
 
 export default function App() {
@@ -22,9 +22,9 @@ export default function App() {
               <Home />
             </Route>
             <ProtectedRoute path="/institutions" protection="web3">
-              <InstitutionsPage />
+              <InstitutionsList />
             </ProtectedRoute>
-            <ProtectedRoute path="/create-institution" protection="admin">
+            <ProtectedRoute path="/create-institution" protection="role" roles={["admin"]}>
               <InstitutionForm />
             </ProtectedRoute>
             <ProtectedRoute path="/validate" protection="web3">

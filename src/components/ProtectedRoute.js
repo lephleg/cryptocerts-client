@@ -7,31 +7,26 @@ function RedirectToHome() {
 };
 
 function RoleProtectedRoute(props) {
-    const {protection, path, children } = props;
-
-    const role = useSelector((state) => state.connection.role);
-
-    let allowed = role === protection ? true : false;
+    const { roles, path, children } = props;
+    const roleState = useSelector((state) => state.connection.role);
+    const allowed = roles.includes(roleState);
 
     return allowed ? <Route path={path}>{children}</Route> : <RedirectToHome />;
 }
 
 function Web3ProtectedRoute(props) {
     const { path, children } = props;
-
     const web3Capable = useSelector((state) => state.connection.web3Capable);
 
     return web3Capable ? <Route path={path}>{children}</Route> : <RedirectToHome />;
 }
 
 export default function ProtectedRoute(props) {
-    const { protection, path, children } = props;
+    const { protection, roles, path, children } = props;
 
     switch (protection) {
-        case 'admin':
-        case 'institution':
-        case 'student':
-            return <RoleProtectedRoute path={path} protection={protection}>{children}</RoleProtectedRoute>;
+        case 'role':
+            return <RoleProtectedRoute path={path} roles={roles}>{children}</RoleProtectedRoute>;
         case 'web3':
             return <Web3ProtectedRoute path={path}>{children}</Web3ProtectedRoute>;
         default:
