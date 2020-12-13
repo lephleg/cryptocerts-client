@@ -91,7 +91,7 @@ export default function SlideDrawer(props) {
         <ListItemLink key={1} to="/" primary="Home" icon={<HomeIcon />} />
       </List>
       <Divider className={clsx({
-        [classes.hide]: !web3Capable || !isAdmin,
+        [classes.hide]: !web3Capable,
       })} />
       <List className={clsx({
         [classes.hide]: !web3Capable && !isAdmin,
