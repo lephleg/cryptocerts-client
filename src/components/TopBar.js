@@ -10,6 +10,12 @@ import Button from '@material-ui/core/Button';
 import MenuIcon from '@material-ui/icons/Menu';
 import { ConnectionContext } from '../context/ConnectionProvider';
 import { useSelector } from 'react-redux';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import MenuItem from '@material-ui/core/MenuItem';
+import Menu from '@material-ui/core/Menu';
+import SchoolIcon from '@material-ui/icons/School';
+import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
+import BuildIcon from '@material-ui/icons/Build';
 
 const useStyles = makeStyles((theme) => ({
     title: {
@@ -43,6 +49,35 @@ export default function TopBar() {
     const classes = useStyles(drawerContext);
     const { handleConnect, handleDisconnect } = useContext(ConnectionContext);
     const connected = useSelector((state) => state.connection.connected);
+    const role = useSelector((state) => state.connection.role);
+
+
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const open = Boolean(anchorEl);
+
+    const handleMenu = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    const handleDisconnectAndClose = () => {
+        handleClose();
+        handleDisconnect();
+    };
+
+    let icon;
+    if (role === 'admin') {
+        icon = <BuildIcon fontSize="large"/>
+    } else if (role === 'institution') {
+        icon = <AccountBalanceIcon  fontSize="large"/>
+    } else if (role === 'student') {
+        icon = <SchoolIcon  fontSize="large"/>
+    } else {
+        icon = <AccountCircle  fontSize="large"/>
+    }
 
     return (
         <AppBar color="primary" position="fixed" className={clsx(classes.appBar, { [classes.appBarShift]: drawerContext.open })}>
@@ -59,12 +94,32 @@ export default function TopBar() {
                 <Typography className={classes.title} variant="h6">
                     {appName}
                 </Typography>
-                <Button
-                    color="inherit"
-                    onClick={!connected ? handleConnect : handleDisconnect}
-                >
-                    {!connected ? "Connect" : "Disconnect"}
-                </Button>
+                {!connected && (
+                    <Button color="inherit" onClick={handleConnect}>Connect</Button>
+                )}
+                {connected && (
+                    <div>
+                        <IconButton
+                            aria-label="account of current user"
+                            aria-controls="menu-appbar"
+                            aria-haspopup="true"
+                            onClick={handleMenu}
+                            color="inherit"
+                            size="medium"
+                        >
+                            {icon}
+                        </IconButton>
+                        <Menu
+                            id="menu-appbar"
+                            anchorEl={anchorEl}
+                            keepMounted
+                            open={open}
+                            onClose={handleClose}
+                        >
+                            <MenuItem onClick={handleDisconnectAndClose}>Disconnect</MenuItem>
+                        </Menu>
+                    </div>
+                )}
             </Toolbar>
         </AppBar>
     );
