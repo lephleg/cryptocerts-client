@@ -7,6 +7,8 @@ import SlideDrawer from "./SlideDrawer";
 import Content from './Content';
 import ConnectDialog from './ConnectDialog';
 import Notification from './Notification';
+import NetworkAlertDialog from './NetworkAlertDialog';
+import Web3AlertDialog from './Web3AlertDialog';
 
 const useStyles = makeStyles({
     root: {
@@ -26,6 +28,8 @@ export default function MainLayout(props) {
                     {props.children}
                 </Content>
             </DrawerProvider>
+            <Web3AlertDialog />
+            <NetworkAlertDialog />
             <ConnectDialog />
             <Notification />
         </div>

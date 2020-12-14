@@ -6,7 +6,8 @@ import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { useInterval } from '../hooks/useInterval';
 import {
-    setConnected as setConnectedAction,
+    setConnected,
+    setNetwork,
     setActiveAccount,
     setWeb3Capable,
     setAdminAccount,
@@ -15,10 +16,14 @@ import {
 import { fetchInstitutions } from '../features/institutions/institutionsSlice';
 import { fetchCertificates } from '../features/certificates/certificatesSlice';
 import { abi as CryptoCertsAbi } from '../contracts/CryptoCerts.json';
-import { CRYPTOCERTS_CONTRACT_ADDRESS } from '../config';
+import { CRYPTOCERTS_CONTRACT_ADDRESS, CRYPTOCERTS_NETWORK_ID } from '../config';
 
 export const ConnectionContext = React.createContext({
+    web3AlertDialogOpen: false,
+    networkAlertDialogOpen: false,
     connectDialogOpen: false,
+    handleWeb3AlertDialogClose: () => { },
+    handleNetworkAlertDialogClose: () => { },
     handleConnect: () => { },
     handleDisconnect: () => { },
 });
@@ -30,11 +35,17 @@ export default function ConnectionProvider(props) {
     const dispatch = useDispatch();
     const activeAccount = useSelector((state) => state.connection.activeAccount);
     const connectedState = useSelector((state) => state.connection.connected);
+    const network = useSelector((state) => parseInt(state.connection.network));
 
     const [readyForWeb3, setReadyForWeb3] = React.useState(false);
     const [connectDialogOpen, setConnectDialogOpen] = React.useState(false);
+    const [web3AlertDialogOpen, setWeb3AlertDialogOpen] = React.useState(false);
+    const [networkAlertDialogOpen, setNetworkAlertDialogOpen] = React.useState(false);
 
     const { showMessage } = useContext(NotificationsContext);
+
+    // eslint-disable-next-line eqeqeq
+    const correctNetwork = network == parseInt(CRYPTOCERTS_NETWORK_ID);
 
     useEffect(() => {
         let ready = Web3Utils.browserIsWeb3Capable() && Web3Utils.hasWeb3Available();
@@ -56,9 +67,15 @@ export default function ConnectionProvider(props) {
         setReadyForWeb3(ready);
         dispatch(setWeb3Capable(ready));
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dispatch, contract]); // Avoid using showMessage in dependencies
+    }, [dispatch, contract, correctNetwork]); // Avoid using showMessage in dependencies
 
     useInterval(() => {
+        // sync network
+        if (readyForWeb3) {
+            web3.eth.getChainId().then(id => {
+                if (id !== network) dispatch(setNetwork(id));
+            });
+        }
         // sync active account every 3 seconds
         if (connectedState) {
             web3.eth.requestAccounts()
@@ -74,8 +91,12 @@ export default function ConnectionProvider(props) {
 
     const connect = () => {
         if (!readyForWeb3) {
-            alert('No Web3 provider detected. Please consider installing MetaMask in order to use CryptoCerts.');
-            dispatch(setWeb3Capable(false));
+            setWeb3AlertDialogOpen(true);
+            return;
+        }
+
+        if (!correctNetwork) {
+            setNetworkAlertDialogOpen(true);
             return;
         }
 
@@ -95,15 +116,27 @@ export default function ConnectionProvider(props) {
         let connected = accounts.length > 0;
         let message = connected ? "You are connected!" : "You have been disconnected!";
 
-        dispatch(setConnectedAction(connected));
+        dispatch(setConnected(connected));
         dispatch(setActiveAccount(accounts));
         dispatch(determineRole());
 
         showMessage(message);
     }
 
+    const handleWeb3AlertDialogClose = () => {
+        setWeb3AlertDialogOpen(false);
+    }
+
+    const handleNetworkAlertDialogClose = () => {
+        setNetworkAlertDialogOpen(false);
+    }
+
     const connectionContext = {
+        web3AlertDialogOpen: web3AlertDialogOpen,
+        networkAlertDialogOpen: networkAlertDialogOpen,
         connectDialogOpen: connectDialogOpen,
+        handleWeb3AlertDialogClose: handleWeb3AlertDialogClose,
+        handleNetworkAlertDialogClose: handleNetworkAlertDialogClose,
         handleConnect: connect,
         handleDisconnect: disconnect
     };

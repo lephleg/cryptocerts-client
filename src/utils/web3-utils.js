@@ -1,4 +1,6 @@
 import Bowser from 'bowser';
+import { CRYPTOCERTS_NETWORK_ID } from '../config';
+
 
 // Validates user's browser is web3 capable
 const funcs = {
@@ -28,6 +30,7 @@ const funcs = {
     if (typeof networkId === 'undefined') {
       networkId = '';
     }
+    let cryptoCertsNetId = parseInt(CRYPTOCERTS_NETWORK_ID);
 
     switch (networkId) {
       case 1:
@@ -44,6 +47,9 @@ const funcs = {
         break;
       case 42:
         networkName = 'Kovan';
+        break;
+      case cryptoCertsNetId:
+        networkName = 'CryptoCerts';
         break;
       case '':
         networkName = 'None';
