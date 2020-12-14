@@ -66,6 +66,9 @@ export default function ConnectionProvider(props) {
         }
         setReadyForWeb3(ready);
         dispatch(setWeb3Capable(ready));
+        if (!correctNetwork) {
+            disconnect();
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch, contract, correctNetwork]); // Avoid using showMessage in dependencies
 
