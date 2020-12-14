@@ -32,6 +32,7 @@ export const connectionSlice = createSlice({
     name: 'connection',
     initialState: {
         web3Capable: false,
+        network: '',
         connected: false,
         activeAccount: '',
         admin: '',
@@ -41,6 +42,9 @@ export const connectionSlice = createSlice({
     reducers: {
         setWeb3Capable: (state, action) => {
             state.web3Capable = action.payload;
+        },
+        setNetwork: (state, action) => {
+            state.network = action.payload;
         },
         setConnected: (state, action) => {
             state.connected = action.payload;
@@ -72,6 +76,7 @@ export const connectionSlice = createSlice({
 
 export const {
     setWeb3Capable,
+    setNetwork,
     setConnected,
     setActiveAccount,
     setAdminAccount,
