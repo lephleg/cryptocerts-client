@@ -117,7 +117,7 @@ export default function ConnectionProvider(props) {
 
     const updateConnectionState = (accounts = []) => {
         let connected = accounts.length > 0;
-        let message = connected ? "You are connected!" : "You have been disconnected!";
+        let message = connected ? "You are connected!" : "You are currently disconnected!";
 
         dispatch(setConnected(connected));
         dispatch(setActiveAccount(accounts));
