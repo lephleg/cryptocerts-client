@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useRef, useState } from 'react'
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import { Box, Button, makeStyles } from '@material-ui/core';
@@ -6,6 +6,8 @@ import TextField from '@material-ui/core/TextField';
 import { useDispatch } from 'react-redux';
 import { saveNewCertificate } from '../features/certificates/certificatesSlice';
 import Web3 from 'web3';
+import { useIpfs } from '../hooks/useIpfs';
+import { DocumentDropzone } from './DocumentDropzone';
 
 const useStyles = makeStyles((theme) => ({
     title: {
@@ -30,30 +32,40 @@ const useStyles = makeStyles((theme) => ({
 
 export default function CertificateForm() {
     const classes = useStyles();
-
+    const dropzoneRef = useRef();
     const dispatch = useDispatch();
+    const { ipfsState, saveToIpfs } = useIpfs();
 
     const [title, setTitle] = useState('');
     const [studentAddress, setStudentAddress] = useState('');
+    const [fileSelected, setFileSelected] = useState(null);
 
     const onTitleChanged = (e) => setTitle(e.target.value);
     const onStudentAddressChanged = (e) => setStudentAddress(e.target.value);
 
     const onSaveClicked = () => {
         if (canSave) {
-            dispatch(saveNewCertificate(title, studentAddress));
-            setTitle('')
-            setStudentAddress('')
+            saveToIpfs(fileSelected)
+                .then((cid) => {
+                    dispatch(saveNewCertificate(title, studentAddress, cid));
+                    clearForm();
+                });
         }
     };
 
-    const onClearClicked = () => {
-        setTitle('')
-        setStudentAddress('')
+    const handleSelectedFile = (file) => {
+        setFileSelected(file);
+    }
+
+    const clearForm = () => {
+        setTitle('');
+        setStudentAddress('');
+        setFileSelected(null);
+        dropzoneRef.current.removeFile();
     };
 
-    const canSave = Boolean(title) && Web3.utils.isAddress(studentAddress);
-    const canClear = Boolean(title) || Boolean(studentAddress);
+    const canSave = Boolean(title) && Web3.utils.isAddress(studentAddress) && Boolean(fileSelected) && ipfsState;
+    const canClear = Boolean(title) || Boolean(studentAddress) || Boolean(fileSelected);
 
     return (
         <Fragment>
@@ -79,10 +91,11 @@ export default function CertificateForm() {
                             value={studentAddress}
                             onChange={onStudentAddressChanged}
                         />
+                        <DocumentDropzone handleSelectedFile={handleSelectedFile} ref={dropzoneRef} />
                     </form>
                     <Box className={classes.buttons}>
                         <Button variant="contained" color="primary" onClick={onSaveClicked} disabled={!canSave}>Save</Button>
-                        <Button variant="contained" color="default" onClick={onClearClicked} disabled={!canClear}>Clear</Button>
+                        <Button variant="contained" color="default" onClick={clearForm} disabled={!canClear}>Clear</Button>
                     </Box>
                 </Container>
             </section>

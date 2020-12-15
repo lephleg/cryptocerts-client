@@ -46,11 +46,10 @@ export const fetchCertificates = createAsyncThunk('certificates/fetchCertificate
     return Promise.all(promises);
 })
 
-export function saveNewCertificate(title, studentAddress) {
+export function saveNewCertificate(title, studentAddress, cid) {
     return async function saveNewCertificateThunk(dispatch, getState) {
         let activeAccount = getState().connection.activeAccount;
-        // temp
-        let { digest, hashFunction, size } = getBytes32FromMultiash("QmahqCsAUAw7zMv6P6Ae8PjCTck7taQA6FgGQLnWdKG7U8");
+        let { digest, hashFunction, size } = getBytes32FromMultiash(cid);
         await contract.methods.createCertificate(title, digest, hashFunction, size, studentAddress).send({ from: activeAccount });
     }
 }
