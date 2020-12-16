@@ -5,9 +5,9 @@ import Button from '@material-ui/core/Button';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import VerifiedUserIcon from '@material-ui/icons/VerifiedUser';
-import { green } from '@material-ui/core/colors'
-import { DialogActions, makeStyles, Paper, Typography } from '@material-ui/core';
+import ErrorIcon from '@material-ui/icons/Error';
+import { red } from '@material-ui/core/colors'
+import { DialogActions, makeStyles, Typography } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
     title: {
@@ -16,29 +16,16 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: "center",
         paddingBottom: theme.spacing(1),
     },
-    description: {
-        color: "#888"
-    },
     icon: {
-        color: green[800],
+        color: red[800],
         fontSize: 30,
         margin: theme.spacing(1)
-    },
-    detailsWrapper: {
-        backgroundColor: "#f1f1f1",
-        textAlign: "left",
-        borderWidth: 1,
-        borderRadius: 2,
-        borderColor: '#dddddd',
-        overflow: "scroll",
-        maxWidth: "100%",
-        maxHeight: "100%",
     }
 }));
 
-export default function ValidDocumentDialog({ open, details, handleClose }) {
+export default function InvalidDocumentDialog({ open, handleClose }) {
     const classes = useStyles();
-    const detailsObj = Object.fromEntries(details);
+
     return (
         <Dialog
             open={open}
@@ -47,17 +34,14 @@ export default function ValidDocumentDialog({ open, details, handleClose }) {
             onClose={handleClose}
         >
             <DialogTitle disableTypography id="alert-dialog-title" className={classes.title}>
-                <VerifiedUserIcon className={classes.icon} />
-                <Typography variant="h5">Your document is valid</Typography>
+                <ErrorIcon className={classes.icon} />
+                <Typography variant="h5">Your document is invalid</Typography>
             </DialogTitle>
             <DialogContent>
-                <Box textAlign={"center"}>
-                    <DialogContentText id="alert-dialog-description" className={classes.description}>
-                        The document provided has been validated successfully against the blockchain records! Below are the transaction details:
+                <Box textAlign={"center"} >
+                    <DialogContentText id="alert-dialog-description">
+                        The document provided cannot be validated against any of the blockchain records. Please ensure no alterations have been made to the document since its issuance.
                     </DialogContentText>
-                    <Paper my={2} className={classes.detailsWrapper}>
-                        <pre className={classes.details}>{JSON.stringify(detailsObj, null, 2)}</pre>
-                    </Paper>
                     <DialogActions>
                         <Button color="primary" onClick={handleClose} autoFocus>Ok</Button>
                     </DialogActions>
