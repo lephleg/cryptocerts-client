@@ -11,6 +11,7 @@ import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import SchoolIcon from '@material-ui/icons/School';
 import PersonIcon from '@material-ui/icons/Person';
 import ethereum_logo from '../static/images/eth-diamond-black.png';
+import { useHistory } from 'react-router';
 
 const useStyles = makeStyles((theme) => ({
     icon: {
@@ -26,6 +27,8 @@ const useStyles = makeStyles((theme) => ({
 export default function Home(props) {
     const classes = useStyles(props);
 
+    const { push } = useHistory();
+
     return (
         <React.Fragment>
             <section>
@@ -35,7 +38,7 @@ export default function Home(props) {
                         <Typography variant="overline" component="span">Welcome to CryptoCerts</Typography>
                         <Typography variant="h3" component="h2">A decentralized academic certificate registry for the Web3</Typography>
                         <Box mt={4}>
-                            <Button color="primary" endIcon={<ArrowRightAltIcon />}>Validate a document</Button>
+                            <Button color="primary" endIcon={<ArrowRightAltIcon />} onClick={() => push('/validate')} >Validate a document</Button>
                         </Box>
                     </Box>
                 </Container>
