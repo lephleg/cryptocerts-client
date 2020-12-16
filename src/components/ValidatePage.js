@@ -4,6 +4,14 @@ import Container from '@material-ui/core/Container';
 import { Box, Button, makeStyles } from '@material-ui/core';
 import { DocumentDropzone } from './DocumentDropzone';
 import { useIpfs } from '../hooks/useIpfs';
+import { abi as CryptoCertsAbi } from '../contracts/CryptoCerts.json';
+import { CRYPTOCERTS_CONTRACT_ADDRESS } from '../config';
+import Web3 from 'web3';
+import { getBytes32FromMultihash } from '../utils/multihash';
+import ValidDocumentFile from './ValidDocumentDialog';
+
+const web3 = new Web3(window.ethereum);
+const contract = new web3.eth.Contract(CryptoCertsAbi, CRYPTOCERTS_CONTRACT_ADDRESS);
 
 const useStyles = makeStyles((theme) => ({
     centered: {
@@ -30,17 +38,35 @@ export default function ValidatePage(props) {
     const { ipfsState, getCid } = useIpfs();
 
     const [fileSelected, setFileSelected] = useState(null);
+    const [openDialog, setOpenDialog] = useState(false);
+    const [details, setDetails] = useState([]);
+
 
     const handleSelectedFile = (file) => {
         setFileSelected(file);
+    }
+    const handleClose = () => {
+        setOpenDialog(false);
     }
 
     const onValidateClicked = () => {
         if (canValidate) {
             getCid(fileSelected)
                 .then((cid) => {
-                    console.log(cid);
-                    //
+                    let { digest } = getBytes32FromMultihash(cid);
+                    contract.events.CertificateCreated({
+                        filter: { digest: [digest] },
+                        fromBlock: 0
+                    }, (error, event) => {
+                        if (!error) {
+                            let array = Object.entries(event);
+                            setDetails(array);
+                            setOpenDialog(true);
+                        } else {
+                            console.error(error);
+                        }
+                    });
+
                 });
         }
     };
@@ -67,6 +93,7 @@ export default function ValidatePage(props) {
                     </Box>
                 </Container>
             </section>
+            <ValidDocumentFile open={openDialog} details={details} handleClose={handleClose} />
         </Fragment>
     );
 }
