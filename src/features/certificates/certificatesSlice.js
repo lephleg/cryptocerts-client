@@ -6,7 +6,7 @@ import {
 import Web3 from 'web3';
 import { abi as CryptoCertsAbi } from '../../contracts/CryptoCerts.json';
 import { CRYPTOCERTS_CONTRACT_ADDRESS } from '../../config';
-import { getBytes32FromMultiash } from '../../utils/multihash';
+import { getBytes32FromMultihash } from '../../utils/multihash';
 
 const web3 = new Web3(window.ethereum);
 const contract = new web3.eth.Contract(CryptoCertsAbi, CRYPTOCERTS_CONTRACT_ADDRESS);
@@ -49,7 +49,7 @@ export const fetchCertificates = createAsyncThunk('certificates/fetchCertificate
 export function saveNewCertificate(title, studentAddress, cid) {
     return async function saveNewCertificateThunk(dispatch, getState) {
         let activeAccount = getState().connection.activeAccount;
-        let { digest, hashFunction, size } = getBytes32FromMultiash(cid);
+        let { digest, hashFunction, size } = getBytes32FromMultihash(cid);
         await contract.methods.createCertificate(title, digest, hashFunction, size, studentAddress).send({ from: activeAccount });
     }
 }
