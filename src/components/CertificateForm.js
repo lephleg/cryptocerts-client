@@ -34,7 +34,7 @@ export default function CertificateForm() {
     const classes = useStyles();
     const dropzoneRef = useRef();
     const dispatch = useDispatch();
-    const { ipfsState, saveToIpfs } = useIpfs();
+    const { ipfsState, addToIpfs } = useIpfs();
 
     const [title, setTitle] = useState('');
     const [studentAddress, setStudentAddress] = useState('');
@@ -45,7 +45,7 @@ export default function CertificateForm() {
 
     const onSaveClicked = () => {
         if (canSave) {
-            saveToIpfs(fileSelected)
+            addToIpfs(fileSelected)
                 .then((cid) => {
                     dispatch(saveNewCertificate(title, studentAddress, cid));
                     clearForm();

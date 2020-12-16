@@ -26,15 +26,19 @@ export const useIpfs = function () {
         };
     }, []);
 
-    async function saveToIpfs(file) {
-        const added = await ipfs.add(
-            file,
-            {
+    async function addToIpfs(file, options = null) {
+        if (!options) {
+            options = {
                 progress: (prog) => console.log(`received: ${prettyBytes(prog)}`)
-            }
-        )
+            };
+        }
+        const added = await ipfs.add(file, options);
         return added.cid.toString();
     }
 
-    return { ipfsState, saveToIpfs };
+    async function getCid(file) {
+        return await addToIpfs(file, { onlyHash: true });
+    }
+
+    return { ipfsState, addToIpfs, getCid };
 }
