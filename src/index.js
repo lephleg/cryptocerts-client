@@ -8,8 +8,15 @@ import NotificationsProvider from './context/NotificationsProvider';
 import ConnectionProvider from './context/ConnectionProvider';
 import { Provider as ReduxProvider } from 'react-redux';
 import store from './store';
+import { red } from '@material-ui/core/colors';
 
-const theme = unstable_createMuiStrictModeTheme();
+const theme = unstable_createMuiStrictModeTheme({
+  palette: {
+    secondary: {
+      main: red[700],
+    }
+  },
+});
 
 ReactDOM.render(
   <React.StrictMode>
