@@ -19,9 +19,9 @@ const initialState = institutionsAdapter.getInitialState({
 
 export const fetchInstitutions = createAsyncThunk('institutions/fetchInstitutions', async (_, thunkAPI) => {
     const activeAccount = thunkAPI.getState().connection.activeAccount;
-    const size = await contract.methods.getInstitutionsSize().call({ from: activeAccount })
+    const count = await contract.methods.getInstitutionsCount().call({ from: activeAccount })
     let promises = [];
-    for (let i = 0; i < size; i++) {
+    for (let i = 0; i < count; i++) {
         let prom = contract.methods.institutions(i).call({ from: activeAccount }).then((payload) => {
             return {
                 id: i + 1, // increment id in order to skip zero and match the contract institution id
@@ -45,11 +45,7 @@ export function saveNewInstitution(name,location, address) {
 const institutionsSlice = createSlice({
     name: 'institutions',
     initialState,
-    reducers: {
-        // institutionCreated(state, action) {
-        //     institutionsAdapter.upsertMany(state, action.payload)
-        // }
-    },
+    reducers: {},
     extraReducers: {
         [fetchInstitutions.pending]: (state, action) => {
             state.status = 'loading'
