@@ -20,31 +20,33 @@ const initialState = certificatesAdapter.getInitialState({
 
 export const fetchCertificates = createAsyncThunk('certificates/fetchCertificates', async (_, thunkAPI) => {
     const activeAccount = thunkAPI.getState().connection.activeAccount;
-    const role = thunkAPI.getState().connection.role;
-    let certificateIds;
-
-    if (role === 'institution') {
-        certificateIds = await contract.methods.getCertificatesByInstitution(activeAccount).call({ from: activeAccount });
-    } else if (role === 'student') {
-        certificateIds = await contract.methods.getCertificatesByStudent(activeAccount).call({ from: activeAccount });
-    }
-
+    let count = await contract.methods.getCertificatesCount().call({ from: activeAccount })
     let promises = [];
-    for (let i = 0; i < certificateIds.length; i++) {
-        let prom = contract.methods.certificates(certificateIds[i]).call({ from: activeAccount }).then((payload) => {
-            return {
-                id: parseInt(certificateIds[i]) + 1, // increment id in order to skip zero and match the contract certificate id
-                title: payload.title,
-                digest: payload.digest,
-                hashFunction: payload.hashFunction,
-                size: payload.size,
-                createdAt: payload.created_at,
-            }
-        });
-        promises.push(prom);
+    for (let i = 0; i < count; i++) {
+        promises.push(fetchCertificate(i, activeAccount));
     }
     return Promise.all(promises);
 })
+
+async function fetchCertificate(index, account = null) {
+    // increment index in order to match the contract certificate id
+    let certId = parseInt(index) + 1;
+    let institutionAddress = await contract.methods.certificateToInstitution(certId).call({ from: account });
+    let studentAddress = await contract.methods.certificateToStudent(certId).call({ from: account });
+
+    return contract.methods.certificates(index).call({ from: account }).then((payload) => {
+        return {
+            id: certId,
+            title: payload.title,
+            student: studentAddress,
+            institution: institutionAddress,
+            digest: payload.digest,
+            hashFunction: payload.hashFunction,
+            size: payload.size,
+            createdAt: payload.created_at,
+        }
+    })
+}
 
 export function saveNewCertificate(title, studentAddress, cid) {
     return async function saveNewCertificateThunk(dispatch, getState) {
