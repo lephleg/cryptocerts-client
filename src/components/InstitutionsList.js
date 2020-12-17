@@ -1,20 +1,25 @@
 import React, { Fragment, useEffect } from 'react';
 import Typography from '@material-ui/core/Typography';
-import { Box, makeStyles } from '@material-ui/core';
+import { Box, Container, makeStyles, Slide } from '@material-ui/core';
 import { fetchInstitutions, selectAllInstitutions } from '../features/institutions/institutionsSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import MaterialCarousel from './MaterialCarousel';
+import InstitutionCard from './InstitutionCard';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     title: {
+        marginBottom: theme.spacing(6)
+    },
+    centered: {
         textAlign: "center"
     }
-});
+}));
 
 export default function InstitutionsList() {
     const classes = useStyles();
-
     const dispatch = useDispatch();
     const institutionsStatus = useSelector((state) => state.institutions.status);
+    const role = useSelector((state) => state.connection.role);
 
     useEffect(() => {
         if (institutionsStatus === 'idle') {
@@ -23,22 +28,35 @@ export default function InstitutionsList() {
     }, [institutionsStatus, dispatch])
 
     let institutions = useSelector(selectAllInstitutions);
+    const isAdmin = role === "admin";
+
+    institutions = institutions.slice(0,3);
 
     const renderedInstitutions = institutions.map((institution => {
-        return <Typography variant="body1" component="p" key={institution.id}>{institution.id} - {institution.name}</Typography>
+        return <InstitutionCard
+            key={institution.id}
+            name={institution.name}
+            location={institution.location}
+            canEdit={isAdmin}
+            canDelete={isAdmin}
+        />
     }))
 
     return (
         <Fragment>
             <section>
-                <Box className={classes.title}>
-                    <Typography variant="h5" component="h5">Institutions</Typography>
-                </Box>
+                <Container maxWidth="md" className={classes.title}>
+                    <Box className={classes.centered}>
+                        <Typography variant="h5" component="h5">Institutions</Typography>
+                    </Box>
+                </Container>
             </section>
             <section>
-                <Box>
-                    {renderedInstitutions}
-                </Box>
+                <Container maxWidth="md" className={classes.centered}>
+                    <MaterialCarousel itemsToShow={institutions.length < 3 ? institutions.length : 3}>
+                        {renderedInstitutions}
+                    </MaterialCarousel>
+                </Container>
             </section>
         </Fragment>
     );
