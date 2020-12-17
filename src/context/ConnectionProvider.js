@@ -44,8 +44,7 @@ export default function ConnectionProvider(props) {
 
     const { showMessage } = useContext(NotificationsContext);
 
-    // eslint-disable-next-line eqeqeq
-    const correctNetwork = network == parseInt(CRYPTOCERTS_NETWORK_ID);
+    const correctlyConnected = isOnCorrectNetwork(network);
 
     useEffect(() => {
         let ready = Web3Utils.browserIsWeb3Capable() && Web3Utils.hasWeb3Available();
@@ -63,42 +62,81 @@ export default function ConnectionProvider(props) {
             });
             // store admin account
             contract.methods.owner().call().then(account => dispatch(setAdminAccount(account)));
+            // sync network state
+            syncNetwork();
         }
         setReadyForWeb3(ready);
         dispatch(setWeb3Capable(ready));
-        if (!correctNetwork) {
-            disconnect();
-        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dispatch, contract, correctNetwork]); // Avoid using showMessage in dependencies
+    }, [dispatch, contract]); // Avoid intentionally showMessage and syncNetworkin in dependencies
 
     useInterval(() => {
-        // sync network
+        // sync every 3 sec
         if (readyForWeb3) {
-            web3.eth.getChainId().then(id => {
-                if (id !== network) dispatch(setNetwork(id));
-            });
+            syncNetwork();
         }
-        // sync active account every 3 seconds
         if (connectedState) {
-            web3.eth.requestAccounts()
-                .then(accounts => {
-                    if (accounts[0] !== activeAccount) {
-                        showMessage("Active account change detected!")
-                        dispatch(setActiveAccount(accounts));
-                        dispatch(determineRole());
-                    }
-                });
+            syncActiveAccount();
         }
     }, 3000);
 
+    /**
+     * Checks if the network id passed matches the CryptoCerts network id.
+     * 
+     * @param {int} networkId The network id in question.
+     * @return {bool} True if the networks match, false otherwise.
+     */
+    function isOnCorrectNetwork(networkId) {
+        return networkId === parseInt(CRYPTOCERTS_NETWORK_ID);
+    }
+
+    /**
+     * Syncs the network state.
+     * 
+     * If on correct network updates the NetworkAlertDialog open state to false.
+     * if not on correct network, disconnects the user if currently connected.
+     */
+    async function syncNetwork() {
+        web3.eth.getChainId().then(id => {
+            if (id !== network) dispatch(setNetwork(id));
+            if (isOnCorrectNetwork(id)) {
+                setNetworkAlertDialogOpen(false);
+            } else {
+                if (connectedState) disconnect();
+            }
+        });
+    }
+
+    /**
+     * Syncs the active account state.
+     * 
+     * If a change is detected, it prints a message and determines the user role again.
+     */
+    async function syncActiveAccount() {
+        web3.eth.requestAccounts()
+            .then(accounts => {
+                if (accounts[0] !== activeAccount) {
+                    showMessage("Active account change detected!")
+                    dispatch(setActiveAccount(accounts));
+                    dispatch(determineRole());
+                }
+            });
+    }
+
+    /**
+     * Performs the user connection.
+     * 
+     * If no Web3 is available it opens the relevant alert dialog.
+     * If the current network is incorrect, it opens the relevant alert dialog.
+     * While performing the call to the Web3 provider, it displays a relevant dialog.
+     */
     const connect = () => {
         if (!readyForWeb3) {
             setWeb3AlertDialogOpen(true);
             return;
         }
 
-        if (!correctNetwork) {
+        if (!correctlyConnected) {
             setNetworkAlertDialogOpen(true);
             return;
         }
@@ -111,10 +149,20 @@ export default function ConnectionProvider(props) {
             });
     }
 
+    /**
+     * Disconnects the user.
+     */
     const disconnect = () => {
         updateConnectionState();
     }
 
+    /**
+     * Updates the connected state . 
+     * 
+     * It examines the connected accounts, dispays a relevant message and determines user role.
+     * 
+     * @param {array} [accounts=[]] The connected accounts returned by the Web3 provider.
+     */
     const updateConnectionState = (accounts = []) => {
         let connected = accounts.length > 0;
         let message = connected ? "You are connected!" : "You are currently disconnected!";
@@ -126,10 +174,16 @@ export default function ConnectionProvider(props) {
         showMessage(message);
     }
 
+    /**
+     * Sets the Web3 alert dialog open state to false.
+     */
     const handleWeb3AlertDialogClose = () => {
         setWeb3AlertDialogOpen(false);
     }
 
+    /**
+     * Sets the network alert dialog open state to false.
+     */
     const handleNetworkAlertDialogClose = () => {
         setNetworkAlertDialogOpen(false);
     }
