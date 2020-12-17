@@ -26,6 +26,7 @@ export const fetchInstitutions = createAsyncThunk('institutions/fetchInstitution
             return {
                 id: i + 1, // increment id in order to skip zero and match the contract institution id
                 name: payload.name,
+                location: payload.location,
                 isValid: payload.isValid
             }
         });
@@ -34,10 +35,10 @@ export const fetchInstitutions = createAsyncThunk('institutions/fetchInstitution
     return Promise.all(promises);
 })
 
-export function saveNewInstitution(name, address) {
+export function saveNewInstitution(name,location, address) {
     return async function saveNewInstitutionThunk(dispatch, getState) {
         const activeAccount = getState().connection.activeAccount;
-        await contract.methods.createInstitution(name, address).send({ from: activeAccount });
+        await contract.methods.createInstitution(name, location, address).send({ from: activeAccount });
     }
 }
 

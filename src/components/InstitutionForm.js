@@ -34,26 +34,28 @@ export default function InstitutionForm() {
     const dispatch = useDispatch();
 
     const [name, setName] = useState('');
+    const [location, setLocation] = useState('');
     const [address, setAddress] = useState('');
 
     const onNameChanged = (e) => setName(e.target.value);
+    const onLocationChanged = (e) => setLocation(e.target.value);
     const onAddressChanged = (e) => setAddress(e.target.value);
 
     const onSaveClicked = () => {
         if (canSave) {
-            dispatch(saveNewInstitution(name, address));
-            setName('')
-            setAddress('')
+            dispatch(saveNewInstitution(name, location, address));
+            clearForm();
         }
     };
 
-    const onClearClicked = () => {
-        setName('')
-        setAddress('')
-    };
+    const clearForm = () => {
+        setName('');
+        setLocation('');
+        setAddress('');
+    }
 
-    const canSave = Boolean(name) && Web3.utils.isAddress(address);
-    const canClear = Boolean(name) || Boolean(address);
+    const canSave = Boolean(name) && Boolean(location) && Web3.utils.isAddress(address);
+    const canClear = Boolean(name) || Boolean(location) || Boolean(address);
 
     return (
         <Fragment>
@@ -73,6 +75,13 @@ export default function InstitutionForm() {
                             onChange={onNameChanged}
                         />
                         <TextField
+                            id="location"
+                            label="Location"
+                            variant="outlined"
+                            value={location}
+                            onChange={onLocationChanged}
+                        />
+                        <TextField
                             id="address"
                             label="Address"
                             variant="outlined"
@@ -82,7 +91,7 @@ export default function InstitutionForm() {
                     </form>
                     <Box className={classes.buttons}>
                         <Button variant="contained" color="primary" onClick={onSaveClicked} disabled={!canSave}>Save</Button>
-                        <Button variant="contained" color="default" onClick={onClearClicked} disabled={!canClear}>Clear</Button>
+                        <Button variant="contained" color="default" onClick={clearForm} disabled={!canClear}>Clear</Button>
                     </Box>
                 </Container>
             </section>
