@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect } from 'react';
 import Typography from '@material-ui/core/Typography';
-import { Box, Container, makeStyles, Slide } from '@material-ui/core';
+import { Box, Container, makeStyles } from '@material-ui/core';
 import { fetchInstitutions, selectAllInstitutions } from '../features/institutions/institutionsSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import MaterialCarousel from './MaterialCarousel';
