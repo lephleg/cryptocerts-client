@@ -34,8 +34,6 @@ export default function InstitutionsList() {
     const canEdit = false;
     const canDelete = false;
 
-    institutions = institutions.slice(0, 3);
-
     const renderedInstitutions = institutions.map((institution => {
         return <InstitutionCard
             key={institution.id}
