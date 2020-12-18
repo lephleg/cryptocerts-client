@@ -1,4 +1,4 @@
-import React, { Fragment, useRef, useState } from 'react'
+import React, { Fragment, useRef, useState, useContext } from 'react'
 import Container from '@material-ui/core/Container';
 import { Box, Button, makeStyles } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
@@ -8,6 +8,12 @@ import Web3 from 'web3';
 import { useIpfs } from '../hooks/useIpfs';
 import { DocumentDropzone } from './DocumentDropzone';
 import Header from './Header';
+import { ConnectionContext, TRANSACTION_TYPE } from '../context/ConnectionProvider';
+import { abi as CryptoCertsAbi } from '../contracts/CryptoCerts.json';
+import { CRYPTOCERTS_CONTRACT_ADDRESS } from '../config';
+
+const web3 = new Web3(window.ethereum);
+const contract = new web3.eth.Contract(CryptoCertsAbi, CRYPTOCERTS_CONTRACT_ADDRESS);
 
 const useStyles = makeStyles((theme) => ({
     title: {
@@ -32,6 +38,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function CertificateForm() {
     const classes = useStyles();
+    const { handleMetamaskDialogOpen, handleMetamaskDialogClose } = useContext(ConnectionContext);
     const dropzoneRef = useRef();
     const dispatch = useDispatch();
     const { ipfsState, addToIpfs } = useIpfs();
@@ -47,8 +54,13 @@ export default function CertificateForm() {
         if (canSave) {
             addToIpfs(fileSelected)
                 .then((cid) => {
+                    handleMetamaskDialogOpen(TRANSACTION_TYPE);
                     dispatch(saveNewCertificate(title, studentAddress, cid));
-                    clearForm();
+                    contract.events.CertificateCreated({}, (error, event) => {
+                        clearForm();
+                        handleMetamaskDialogClose();
+                        clearForm();
+                    });
                 });
         }
     };

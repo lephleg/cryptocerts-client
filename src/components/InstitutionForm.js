@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useContext } from 'react';
 import Container from '@material-ui/core/Container';
 import { Box, Button, makeStyles } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
@@ -6,6 +6,12 @@ import { useDispatch } from 'react-redux';
 import { saveNewInstitution } from '../features/institutions/institutionsSlice';
 import Web3 from 'web3';
 import Header from './Header';
+import { ConnectionContext, TRANSACTION_TYPE } from '../context/ConnectionProvider';
+import { abi as CryptoCertsAbi } from '../contracts/CryptoCerts.json';
+import { CRYPTOCERTS_CONTRACT_ADDRESS } from '../config';
+
+const web3 = new Web3(window.ethereum);
+const contract = new web3.eth.Contract(CryptoCertsAbi, CRYPTOCERTS_CONTRACT_ADDRESS);
 
 const useStyles = makeStyles((theme) => ({
     title: {
@@ -30,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function InstitutionForm() {
     const classes = useStyles();
-
+    const { handleMetamaskDialogOpen, handleMetamaskDialogClose } = useContext(ConnectionContext);
     const dispatch = useDispatch();
 
     const [name, setName] = useState('');
@@ -43,8 +49,12 @@ export default function InstitutionForm() {
 
     const onSaveClicked = () => {
         if (canSave) {
+            handleMetamaskDialogOpen(TRANSACTION_TYPE);
             dispatch(saveNewInstitution(name, location, address));
-            clearForm();
+            contract.events.InstitutionCreated({}, (error, event) => {
+                clearForm();
+                handleMetamaskDialogClose();
+            });
         }
     };
 

@@ -7,12 +7,13 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { ConnectionContext } from '../context/ConnectionProvider';
 
-export default function ConnectDialog() {
-    const { connectDialogOpen } = useContext(ConnectionContext);
+export default function MetamaskDialog() {
+    const { metamaskDialogOpen, metamaskDialogRequestType } = useContext(ConnectionContext);
+    const title = "Confirm " + metamaskDialogRequestType + " in MetaMask";
 
     return (
         <Dialog
-            open={connectDialogOpen}
+            open={metamaskDialogOpen}
             disableBackdropClick={true}
             disableEscapeKeyDown={true}
             transitionDuration={800}
@@ -20,12 +21,12 @@ export default function ConnectDialog() {
             aria-describedby="alert-dialog-description"
         >
             <DialogTitle id="alert-dialog-title">
-                <Box textAlign={"center"}>{"Confirm connection in MetaMask"}</Box>
+                <Box textAlign={"center"}>{title}</Box>
             </DialogTitle>
             <DialogContent>
                 <Box textAlign={"center"} >
                     <DialogContentText id="alert-dialog-description">
-                        Confirm the request that's just appeared. If you can't see a request, open your MetaMask extension via your browser.
+                        Review and confirm the request that's just appeared. If you can't see a request, open your MetaMask extension via your browser.
                         </DialogContentText>
                     <Box my={3}><CircularProgress thickness={5} /></Box>
                 </Box>

@@ -5,10 +5,10 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import TopBar from "./TopBar";
 import SlideDrawer from "./SlideDrawer";
 import Content from './Content';
-import ConnectDialog from './ConnectDialog';
 import Notification from './Notification';
 import NetworkAlertDialog from './NetworkAlertDialog';
 import Web3AlertDialog from './Web3AlertDialog';
+import MetamaskDialog from './MetamaskDialog';
 
 const useStyles = makeStyles({
     root: {
@@ -30,7 +30,7 @@ export default function MainLayout(props) {
             </DrawerProvider>
             <Web3AlertDialog />
             <NetworkAlertDialog />
-            <ConnectDialog />
+            <MetamaskDialog />
             <Notification />
         </div>
     );

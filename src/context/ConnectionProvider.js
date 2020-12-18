@@ -18,10 +18,16 @@ import { fetchCertificates } from '../features/certificates/certificatesSlice';
 import { abi as CryptoCertsAbi } from '../contracts/CryptoCerts.json';
 import { CRYPTOCERTS_CONTRACT_ADDRESS, CRYPTOCERTS_NETWORK_ID } from '../config';
 
+export const CONNECTION_TYPE = 'connection';
+export const TRANSACTION_TYPE = 'transaction';
+
 export const ConnectionContext = React.createContext({
     web3AlertDialogOpen: false,
     networkAlertDialogOpen: false,
-    connectDialogOpen: false,
+    metamaskDialogOpen: null,
+    metamaskDialogRequestType: null,
+    handleMetamaskDialogOpen: () => { },
+    handleMetamaskDialogClose: () => { },
     handleWeb3AlertDialogClose: () => { },
     handleNetworkAlertDialogClose: () => { },
     handleConnect: () => { },
@@ -38,7 +44,8 @@ export default function ConnectionProvider(props) {
     const network = useSelector((state) => parseInt(state.connection.network));
 
     const [readyForWeb3, setReadyForWeb3] = React.useState(false);
-    const [connectDialogOpen, setConnectDialogOpen] = React.useState(false);
+    const [metamaskDialogOpen, setMetamaskDialogOpen] = React.useState(false);
+    const [metamaskDialogRequestType, setMetamaskDialogRequestType] = React.useState(null);
     const [web3AlertDialogOpen, setWeb3AlertDialogOpen] = React.useState(false);
     const [networkAlertDialogOpen, setNetworkAlertDialogOpen] = React.useState(false);
 
@@ -141,11 +148,11 @@ export default function ConnectionProvider(props) {
             return;
         }
 
-        setConnectDialogOpen(true);
+        handleMetamaskDialogOpen(CONNECTION_TYPE);
         web3.eth.requestAccounts()
             .then((accounts) => {
                 updateConnectionState(accounts);
-                setConnectDialogOpen(false);
+                handleMetamaskDialogClose();
             });
     }
 
@@ -175,6 +182,22 @@ export default function ConnectionProvider(props) {
     }
 
     /**
+     * Sets the MetaMask dialog open state to true.
+     */
+    const handleMetamaskDialogOpen = (type) => {
+        setMetamaskDialogRequestType(type);
+        setMetamaskDialogOpen(true);
+    }
+
+    /**
+     * Sets the MetaMask dialog open state to false.
+     */
+    const handleMetamaskDialogClose = () => {
+        setMetamaskDialogOpen(false);
+        setMetamaskDialogRequestType(null);
+    }
+
+    /**
      * Sets the Web3 alert dialog open state to false.
      */
     const handleWeb3AlertDialogClose = () => {
@@ -191,7 +214,10 @@ export default function ConnectionProvider(props) {
     const connectionContext = {
         web3AlertDialogOpen: web3AlertDialogOpen,
         networkAlertDialogOpen: networkAlertDialogOpen,
-        connectDialogOpen: connectDialogOpen,
+        metamaskDialogOpen: metamaskDialogOpen,
+        metamaskDialogRequestType: metamaskDialogRequestType,
+        handleMetamaskDialogOpen: handleMetamaskDialogOpen,
+        handleMetamaskDialogClose: handleMetamaskDialogClose,
         handleWeb3AlertDialogClose: handleWeb3AlertDialogClose,
         handleNetworkAlertDialogClose: handleNetworkAlertDialogClose,
         handleConnect: connect,
