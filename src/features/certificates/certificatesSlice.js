@@ -2,6 +2,7 @@ import {
     createSlice,
     createAsyncThunk,
     createEntityAdapter,
+    createSelector,
 } from '@reduxjs/toolkit';
 import Web3 from 'web3';
 import { abi as CryptoCertsAbi } from '../../contracts/CryptoCerts.json';
@@ -85,3 +86,18 @@ export const {
     selectById: selectCertificateById,
     selectIds: selectCertificateIds,
 } = certificatesAdapter.getSelectors((state) => state.certificates)
+
+const activeAccount = state => state.connection.activeAccount;
+const role = state => state.connection.role;
+
+export const selectAllUserCertificates = createSelector(
+    [selectAllCertificates, activeAccount, role],
+    (certificates, activeAccount, role) => {
+        switch (role) {
+            case 'institution':
+                return certificates.filter(c => c.institution === activeAccount);
+            case 'student':
+                return certificates.filter(c => c.student === activeAccount);
+        }
+    }
+)

@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect } from 'react';
 import { Container, makeStyles } from '@material-ui/core';
-import { fetchCertificates, selectAllCertificates } from '../features/certificates/certificatesSlice';
+import { fetchCertificates, selectAllUserCertificates } from '../features/certificates/certificatesSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import MaterialCarousel from './MaterialCarousel';
 import CertificateCard from './CertificateCard';
@@ -26,8 +26,7 @@ export default function CertificatesList() {
         }
     }, [certificatesStatus, dispatch])
 
-    // TODO: filter based on user role
-    let certificates = useSelector(selectAllCertificates);
+    let certificates = useSelector(selectAllUserCertificates);
 
     let subtitle;
     if (role === 'institution') {
