@@ -89,21 +89,30 @@ export default function Home(props) {
                                     <AccountBalanceIcon color="primary" className={classes.icon} />
                                     <Typography variant="h6" component="h3">Institutions</Typography>
                                 </Box>
-                                <Typography variant="body1" component="p">Intistutions are able to store their academic certificates in a decentralized immutable way using the distributed ledger of the Ethereum blockchain.</Typography>
+                                <Typography variant="body1" component="p">
+                                    Intistutions are able to issue and assign academic certificates to their students in an decentralized 
+                                    and immutable way utilizing smart contracts running on the distributed ledger of the Ethereum blockchain.
+                                </Typography>
                             </Grid>
                             <Grid item xs={12} sm={4}>
                                 <Box mb={2} display="flex" alignItems="center">
                                     <SchoolIcon color="primary" className={classes.icon} />
                                     <Typography variant="h6" component="h3">Students</Typography>
                                 </Box>
-                                <Typography variant="body1" component="p">Students can browse the certificates assigned to them by the institutions using their private key. In addition, they can fetch a copy of any of them, currently stored encrypted in the InterPlanetary File System (IPFS).</Typography>
+                                <Typography variant="body1" component="p">
+                                    Students can browse the certificates assigned to them and prove ownership by their private key.
+                                    Using CryptoCerts, they can also fetch a copy of the actual document, stored distributedly in the InterPlanetary File System (IPFS).
+                                </Typography>
                             </Grid>
                             <Grid item xs={12} sm={4}>
                                 <Box mb={2} display="flex" alignItems="center">
                                     <PersonIcon color="primary" className={classes.icon} />
                                     <Typography variant="h6" component="h3">Guests</Typography>
                                 </Box>
-                                <Typography variant="body1" component="p">Third-party guests are able to validate any digital document in their possesion against the blockchain certificate records in order to verify its authenticity.</Typography>
+                                <Typography variant="body1" component="p">
+                                    Third-party guests are able to validate any genuine digital document in their possesion against the blockchain
+                                    records in order to verify its integrity and authenticity.
+                                 </Typography>
                             </Grid>
                         </Grid>
                     </Box>
