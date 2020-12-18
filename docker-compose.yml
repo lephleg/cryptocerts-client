@@ -1,7 +1,6 @@
-version: '3.7'
+version: "3.7"
 
 services:
-
   cryptocerts-client:
     container_name: cryptocerts-client
     build:
@@ -9,9 +8,25 @@ services:
       dockerfile: Dockerfile
     image: cryptocerts-client-image
     volumes:
-      - '.:/app'
-      - '/app/node_modules'
+      - ".:/app"
+      - "/app/node_modules"
     ports:
       - 3000:3000
     environment:
       - CHOKIDAR_USEPOLLING=true0
+
+  ipfs:
+    image: ipfs/go-ipfs:latest
+    container_name: ipfs
+    environment:
+      - IPFS_PROFILE=lowpower
+      - IPFS_PATH=/ipfsdata
+    volumes:
+      - ./data/ipfs:/ipfsdata
+    ports:
+      - "4001:4001"
+      - "127.0.0.1:8080:8080"
+      - "127.0.0.1:8081:8081"
+      - "127.0.0.1:5001:5001"
+    command: ["daemon", "--migrate=true" , "--offline"]
+
