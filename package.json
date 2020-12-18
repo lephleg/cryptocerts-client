@@ -13,6 +13,7 @@
     "bowser": "^2.11.0",
     "bs58": "^4.0.1",
     "clsx": "^1.1.1",
+    "file-saver": "^2.0.5",
     "ipfs-http-client": "^48.1.2",
     "pretty-bytes": "^5.4.1",
     "react": "^17.0.1",
