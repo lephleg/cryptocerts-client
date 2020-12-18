@@ -93,8 +93,10 @@ export default function CertificateCard({ certificate, ipfsReady }) {
 
     const userIsStudent = role === 'student';
     const userIsInstitution = role === 'institution';
-    const canEdit = userIsInstitution;
-    const canDelete = userIsInstitution;
+
+    // TODO: Implement certificate delete and edit functionality
+    const canEdit = false;
+    const canDelete = false;
 
     const handleDownloadClick = () => {
         let cid = getMultihashFromBytes32({

@@ -28,7 +28,11 @@ export default function InstitutionsList() {
     }, [institutionsStatus, dispatch])
 
     let institutions = useSelector(selectAllInstitutions);
-    const isAdmin = role === "admin";
+
+    // TODO: Implement institution delete and edit functionality
+    // const isAdmin = role === "admin";
+    const canEdit = false;
+    const canDelete = false;
 
     institutions = institutions.slice(0,3);
 
@@ -37,8 +41,8 @@ export default function InstitutionsList() {
             key={institution.id}
             name={institution.name}
             location={institution.location}
-            canEdit={isAdmin}
-            canDelete={isAdmin}
+            canEdit={canEdit}
+            canDelete={canDelete}
         />
     }))
 
