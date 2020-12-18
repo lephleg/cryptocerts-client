@@ -1,5 +1,4 @@
 import React, { Fragment, useRef, useState } from 'react'
-import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import { Box, Button, makeStyles } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
@@ -8,6 +7,7 @@ import { saveNewCertificate } from '../features/certificates/certificatesSlice';
 import Web3 from 'web3';
 import { useIpfs } from '../hooks/useIpfs';
 import { DocumentDropzone } from './DocumentDropzone';
+import Header from './Header';
 
 const useStyles = makeStyles((theme) => ({
     title: {
@@ -70,9 +70,7 @@ export default function CertificateForm() {
     return (
         <Fragment>
             <section>
-                <Container maxWidth="md" className={classes.title}>
-                    <Typography variant="h5" component="h5">Create a certificate</Typography>
-                </Container>
+            <Header title="Create a certificate" subtitle="Fill the form and upload a genuine document to issue a new certificate" />
             </section>
             <section>
                 <Container maxWidth="sm">

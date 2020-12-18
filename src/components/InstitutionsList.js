@@ -1,14 +1,14 @@
 import React, { Fragment, useEffect } from 'react';
-import Typography from '@material-ui/core/Typography';
-import { Box, Container, makeStyles } from '@material-ui/core';
+import { Container, makeStyles } from '@material-ui/core';
 import { fetchInstitutions, selectAllInstitutions } from '../features/institutions/institutionsSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import MaterialCarousel from './MaterialCarousel';
 import InstitutionCard from './InstitutionCard';
+import Header from './Header';
 
 const useStyles = makeStyles((theme) => ({
     title: {
-        marginBottom: theme.spacing(6)
+        marginBottom: theme.spacing(3)
     },
     centered: {
         textAlign: "center"
@@ -19,7 +19,7 @@ export default function InstitutionsList() {
     const classes = useStyles();
     const dispatch = useDispatch();
     const institutionsStatus = useSelector((state) => state.institutions.status);
-    const role = useSelector((state) => state.connection.role);
+    // const role = useSelector((state) => state.connection.role);
 
     useEffect(() => {
         if (institutionsStatus === 'idle') {
@@ -34,7 +34,7 @@ export default function InstitutionsList() {
     const canEdit = false;
     const canDelete = false;
 
-    institutions = institutions.slice(0,3);
+    institutions = institutions.slice(0, 3);
 
     const renderedInstitutions = institutions.map((institution => {
         return <InstitutionCard
@@ -48,13 +48,7 @@ export default function InstitutionsList() {
 
     return (
         <Fragment>
-            <section>
-                <Container maxWidth="md" className={classes.title}>
-                    <Box className={classes.centered}>
-                        <Typography variant="h5" component="h5">Institutions</Typography>
-                    </Box>
-                </Container>
-            </section>
+            <Header title="Institutions" subtitle="A list of all institutions participating in the registry" />
             <section>
                 <Container maxWidth="md" className={classes.centered}>
                     <MaterialCarousel itemsToShow={institutions.length < 3 ? institutions.length : 3}>

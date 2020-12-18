@@ -1,5 +1,4 @@
 import React, { Fragment, useRef, useState } from 'react';
-import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import { Box, Button, makeStyles } from '@material-ui/core';
 import { DocumentDropzone } from './DocumentDropzone';
@@ -10,6 +9,7 @@ import Web3 from 'web3';
 import { getBytes32FromMultihash } from '../utils/multihash';
 import ValidDocumentFile from './ValidDocumentDialog';
 import InvalidDocumentDialog from './InvalidDocumentDialog';
+import Header from './Header';
 
 const web3 = new Web3(window.ethereum);
 const contract = new web3.eth.Contract(CryptoCertsAbi, CRYPTOCERTS_CONTRACT_ADDRESS);
@@ -91,18 +91,11 @@ export default function ValidatePage(props) {
 
     return (
         <Fragment>
-            <section>
-                <Container maxWidth="md" className={classes.centered}>
-                    <Typography variant="h5" component="h5">Validate a document</Typography>
-                </Container>
-            </section>
+            <Header title="Validate a document" subtitle="Upload a document in order to validate it against the certificates stored in the blockchain records" />
             <section>
                 <Container maxWidth="sm" className={classes.centered}>
-                    <Box p={2}>
-                        <Typography variant="body1" component="p">Upload a document in order to validate it against the certificates stored in the blockchain records</Typography>
-                    </Box>
                     <form className={classes.form} noValidate autoComplete="off">
-                        <DocumentDropzone handleSelectedFile={handleSelectedFile}  ref={dropzoneRef}/>
+                        <DocumentDropzone handleSelectedFile={handleSelectedFile} ref={dropzoneRef} />
                     </form>
                     <Box className={classes.buttons}>
                         <Button variant="contained" color="primary" size="large" onClick={onValidateClicked} disabled={!canValidate}>Validate</Button>

@@ -1,11 +1,11 @@
 import React, { Fragment, useState } from 'react';
-import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import { Box, Button, makeStyles } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import { useDispatch } from 'react-redux';
 import { saveNewInstitution } from '../features/institutions/institutionsSlice';
 import Web3 from 'web3';
+import Header from './Header';
 
 const useStyles = makeStyles((theme) => ({
     title: {
@@ -59,11 +59,7 @@ export default function InstitutionForm() {
 
     return (
         <Fragment>
-            <section>
-                <Container maxWidth="md" className={classes.title}>
-                    <Typography variant="h5" component="h5">Create an institution</Typography>
-                </Container>
-            </section>
+            <Header title="Create an institution" subtitle="Fill the form to create a new institution user" />
             <section>
                 <Container maxWidth="sm">
                     <form className={classes.form} noValidate autoComplete="off">

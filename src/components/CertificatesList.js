@@ -1,11 +1,11 @@
 import React, { Fragment, useEffect } from 'react';
-import Typography from '@material-ui/core/Typography';
-import { Box, Container, makeStyles } from '@material-ui/core';
+import { Container, makeStyles } from '@material-ui/core';
 import { fetchCertificates, selectAllCertificates } from '../features/certificates/certificatesSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import MaterialCarousel from './MaterialCarousel';
 import CertificateCard from './CertificateCard';
 import { useIpfs } from '../hooks/useIpfs';
+import Header from './Header';
 
 const useStyles = makeStyles({
     title: {
@@ -17,6 +17,7 @@ export default function CertificatesList() {
     const classes = useStyles();
     const dispatch = useDispatch();
     const certificatesStatus = useSelector((state) => state.certificates.status);
+    const role = useSelector((state) => state.connection.role);
     const { ipfsState } = useIpfs();
 
     useEffect(() => {
@@ -28,6 +29,13 @@ export default function CertificatesList() {
     // TODO: filter based on user role
     let certificates = useSelector(selectAllCertificates);
 
+    let subtitle;
+    if (role === 'institution') {
+        subtitle = "A list of all certificates issued by your institution";
+    } else if (role === 'student') {
+        subtitle = "A list of all certificates assigned to you by any institution";
+    }
+
     const renderedCertificates = certificates.map((certificate => {
         return <CertificateCard
             key={certificate.id}
@@ -38,13 +46,7 @@ export default function CertificatesList() {
 
     return (
         <Fragment>
-            <section>
-                <Container maxWidth="md" className={classes.title}>
-                    <Box className={classes.centered}>
-                        <Typography variant="h5" component="h5">Certificates</Typography>
-                    </Box>
-                </Container>
-            </section>
+            <Header title="Certificates" subtitle={subtitle} />
             <section>
                 <Container maxWidth="md" className={classes.centered}>
                     <MaterialCarousel itemsToShow={certificates.length < 3 ? certificates.length : 3}>
