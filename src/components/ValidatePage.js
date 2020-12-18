@@ -3,16 +3,11 @@ import Container from '@material-ui/core/Container';
 import { Box, Button, makeStyles } from '@material-ui/core';
 import { DocumentDropzone } from './DocumentDropzone';
 import { useIpfs } from '../hooks/useIpfs';
-import { abi as CryptoCertsAbi } from '../contracts/CryptoCerts.json';
-import { CRYPTOCERTS_CONTRACT_ADDRESS } from '../config';
-import Web3 from 'web3';
 import { getBytes32FromMultihash } from '../utils/multihash';
 import ValidDocumentFile from './ValidDocumentDialog';
 import InvalidDocumentDialog from './InvalidDocumentDialog';
 import Header from './Header';
-
-const web3 = new Web3(window.ethereum);
-const contract = new web3.eth.Contract(CryptoCertsAbi, CRYPTOCERTS_CONTRACT_ADDRESS);
+import { useCryptoCerts } from '../hooks/useCryptoCerts';
 
 const useStyles = makeStyles((theme) => ({
     centered: {
@@ -38,6 +33,7 @@ export default function ValidatePage(props) {
     const classes = useStyles(props);
     const { ipfsState, getCid } = useIpfs();
     const dropzoneRef = useRef();
+    const { cryptoCerts } = useCryptoCerts();
 
     const [fileSelected, setFileSelected] = useState(null);
     const [openValidDialog, setValidOpenDialog] = useState(false);
@@ -65,7 +61,7 @@ export default function ValidatePage(props) {
             getCid(fileSelected)
                 .then((cid) => {
                     let { digest } = getBytes32FromMultihash(cid);
-                    contract.getPastEvents("CertificateCreated", {
+                    cryptoCerts.getPastEvents("CertificateCreated", {
                         filter: { digest: [digest] },
                         fromBlock: 0
                     }, (error, events) => {

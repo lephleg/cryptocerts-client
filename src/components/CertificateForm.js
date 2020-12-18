@@ -9,11 +9,7 @@ import { useIpfs } from '../hooks/useIpfs';
 import { DocumentDropzone } from './DocumentDropzone';
 import Header from './Header';
 import { ConnectionContext, TRANSACTION_TYPE } from '../context/ConnectionProvider';
-import { abi as CryptoCertsAbi } from '../contracts/CryptoCerts.json';
-import { CRYPTOCERTS_CONTRACT_ADDRESS } from '../config';
-
-const web3 = new Web3(window.ethereum);
-const contract = new web3.eth.Contract(CryptoCertsAbi, CRYPTOCERTS_CONTRACT_ADDRESS);
+import { useCryptoCerts } from '../hooks/useCryptoCerts';
 
 const useStyles = makeStyles((theme) => ({
     title: {
@@ -42,6 +38,7 @@ export default function CertificateForm() {
     const dropzoneRef = useRef();
     const dispatch = useDispatch();
     const { ipfsState, addToIpfs } = useIpfs();
+    const { cryptoCerts } = useCryptoCerts();
 
     const [title, setTitle] = useState('');
     const [studentAddress, setStudentAddress] = useState('');
@@ -56,7 +53,7 @@ export default function CertificateForm() {
                 .then((cid) => {
                     handleMetamaskDialogOpen(TRANSACTION_TYPE);
                     dispatch(saveNewCertificate(title, studentAddress, cid));
-                    contract.events.CertificateCreated({}, (error, event) => {
+                    cryptoCerts.events.CertificateCreated({}, (error, event) => {
                         clearForm();
                         handleMetamaskDialogClose();
                         clearForm();

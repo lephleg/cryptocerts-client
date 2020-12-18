@@ -7,11 +7,7 @@ import { saveNewInstitution } from '../features/institutions/institutionsSlice';
 import Web3 from 'web3';
 import Header from './Header';
 import { ConnectionContext, TRANSACTION_TYPE } from '../context/ConnectionProvider';
-import { abi as CryptoCertsAbi } from '../contracts/CryptoCerts.json';
-import { CRYPTOCERTS_CONTRACT_ADDRESS } from '../config';
-
-const web3 = new Web3(window.ethereum);
-const contract = new web3.eth.Contract(CryptoCertsAbi, CRYPTOCERTS_CONTRACT_ADDRESS);
+import { useCryptoCerts } from '../hooks/useCryptoCerts';
 
 const useStyles = makeStyles((theme) => ({
     title: {
@@ -38,6 +34,7 @@ export default function InstitutionForm() {
     const classes = useStyles();
     const { handleMetamaskDialogOpen, handleMetamaskDialogClose } = useContext(ConnectionContext);
     const dispatch = useDispatch();
+    const { cryptoCerts } = useCryptoCerts();
 
     const [name, setName] = useState('');
     const [location, setLocation] = useState('');
@@ -51,7 +48,7 @@ export default function InstitutionForm() {
         if (canSave) {
             handleMetamaskDialogOpen(TRANSACTION_TYPE);
             dispatch(saveNewInstitution(name, location, address));
-            contract.events.InstitutionCreated({}, (error, event) => {
+            cryptoCerts.events.InstitutionCreated({}, (error, event) => {
                 clearForm();
                 handleMetamaskDialogClose();
             });

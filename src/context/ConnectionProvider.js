@@ -1,5 +1,4 @@
 import React, { useContext, useEffect } from 'react';
-import Web3 from 'web3';
 import Web3Utils from '../utils/web3-utils';
 import { NotificationsContext } from './NotificationsProvider';
 import { useDispatch } from 'react-redux';
@@ -15,8 +14,8 @@ import {
 } from '../features/connection/connectionSlice';
 import { fetchInstitutions } from '../features/institutions/institutionsSlice';
 import { fetchCertificates } from '../features/certificates/certificatesSlice';
-import { abi as CryptoCertsAbi } from '../contracts/CryptoCerts.json';
-import { CRYPTOCERTS_CONTRACT_ADDRESS, CRYPTOCERTS_NETWORK_ID } from '../config';
+import { CRYPTOCERTS_NETWORK_ID } from '../config';
+import { useCryptoCerts } from '../hooks/useCryptoCerts';
 
 export const CONNECTION_TYPE = 'connection';
 export const TRANSACTION_TYPE = 'transaction';
@@ -34,11 +33,9 @@ export const ConnectionContext = React.createContext({
     handleDisconnect: () => { },
 });
 
-const web3 = new Web3(window.ethereum);
-const contract = new web3.eth.Contract(CryptoCertsAbi, CRYPTOCERTS_CONTRACT_ADDRESS);
-
 export default function ConnectionProvider(props) {
     const dispatch = useDispatch();
+    const { web3, cryptoCerts } = useCryptoCerts();
     const activeAccount = useSelector((state) => state.connection.activeAccount);
     const connectedState = useSelector((state) => state.connection.connected);
     const network = useSelector((state) => parseInt(state.connection.network));
@@ -55,27 +52,27 @@ export default function ConnectionProvider(props) {
 
     useEffect(() => {
         let ready = Web3Utils.browserIsWeb3Capable() && Web3Utils.hasWeb3Available();
-        if (ready) {
+        if (ready && Boolean(cryptoCerts)) {
             // needed in order to hide the relevant MetaMask console warning
             window.ethereum.autoRefreshOnNetworkChange = false;
             // subscribe to blockchain events
-            contract.events.InstitutionCreated({}, (error, event) => {
+            cryptoCerts.events.InstitutionCreated({}, (error, event) => {
                 showMessage("A new institution has been created!");
                 dispatch(fetchInstitutions());
             });
-            contract.events.CertificateCreated({}, (error, event) => {
+            cryptoCerts.events.CertificateCreated({}, (error, event) => {
                 showMessage("A new certificate has been issued!");
                 dispatch(fetchCertificates());
             });
             // store admin account
-            contract.methods.owner().call().then(account => dispatch(setAdminAccount(account)));
+            cryptoCerts.methods.owner().call().then(account => dispatch(setAdminAccount(account)));
             // sync network state
             syncNetwork();
         }
         setReadyForWeb3(ready);
         dispatch(setWeb3Capable(ready));
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dispatch, contract]); // Avoid intentionally showMessage and syncNetworkin in dependencies
+    }, [dispatch, cryptoCerts]); // Avoid intentionally showMessage and syncNetworkin in dependencies
 
     useInterval(() => {
         // sync every 3 sec
