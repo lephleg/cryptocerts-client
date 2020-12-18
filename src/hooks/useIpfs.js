@@ -42,7 +42,7 @@ export const useIpfs = function () {
     }
 
     function getDownloadLink(cid) {
-        return IPFS_CONNECTION_DETAILS + "/api/v0/get?arg=" + cid;
+        return IPFS_CONNECTION_DETAILS + "/api/v0/cat?arg=" + cid;
     }
 
     async function downloadPdfFromIpfs(cid, filename) {
