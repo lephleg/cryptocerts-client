@@ -9,7 +9,8 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { Box } from '@material-ui/core';
 import RoomIcon from '@material-ui/icons/Room';
-import { green } from '@material-ui/core/colors';
+import { green, blue } from '@material-ui/core/colors';
+import AccountBoxIcon from '@material-ui/icons/AccountBox';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -31,6 +32,16 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(1),
         color: green[800]
     },
+    address: {
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    addressIcon: {
+        fontSize: 16,
+        margin: theme.spacing(1),
+        color: blue[800]
+    },
     iconWrapper: {
         display: "flex",
         alignItems: "center",
@@ -45,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function InstitutionCard(props) {
+export default function InstitutionCard({ institution, canEdit, canDelete }) {
     const classes = useStyles();
 
     return (
@@ -56,21 +67,27 @@ export default function InstitutionCard(props) {
                 </Box>
                 <CardContent>
                     <Typography gutterBottom variant="subtitle1" component="h2">
-                        {props.name}
+                        {institution.name}
                     </Typography>
                     <Box className={classes.location}>
                         <RoomIcon className={classes.locationIcon} />
                         <Typography variant="body2" color="textSecondary" component="p">
-                            {props.location}
+                            {institution.location}
+                        </Typography>
+                    </Box>
+                    <Box className={classes.address}>
+                        <AccountBoxIcon className={classes.addressIcon} />
+                        <Typography noWrap variant="body2" color="textSecondary" component="p">
+                            {institution.address}
                         </Typography>
                     </Box>
                 </CardContent>
             </CardActionArea>
             <CardActions className={classes.actions}>
-                <Button size="small" color="primary" disabled={!props.canEdit}>
+                <Button size="small" color="primary" disabled={!canEdit}>
                     Edit
                 </Button>
-                <Button size="small" color="secondary" disabled={!props.canDelete}>
+                <Button size="small" color="secondary" disabled={!canDelete}>
                     Delete
                 </Button>
             </CardActions>

@@ -39,8 +39,7 @@ export default function InstitutionsList() {
     const renderedInstitutions = institutions.map((institution => {
         return <InstitutionCard
             key={institution.id}
-            name={institution.name}
-            location={institution.location}
+            institution={institution}
             canEdit={canEdit}
             canDelete={canDelete}
         />
