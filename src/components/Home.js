@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
+import Popover from '@material-ui/core/Popover';
 import Container from '@material-ui/core/Container';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -12,6 +13,7 @@ import SchoolIcon from '@material-ui/icons/School';
 import PersonIcon from '@material-ui/icons/Person';
 import ethereum_logo from '../static/images/eth-diamond-black.png';
 import { useHistory } from 'react-router';
+import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
     icon: {
@@ -21,13 +23,35 @@ const useStyles = makeStyles((theme) => ({
         height: 81,
         backgroundSize: "contain",
         backgroundRepeat: "no-repeat"
-    }
+    },
+    validateButtonWrapper: {
+        padding: theme.spacing(1)
+    },
+    popover: {
+        pointerEvents: 'none',
+    },
+    paper: {
+        padding: theme.spacing(1),
+    },
 }));
 
 export default function Home(props) {
     const classes = useStyles(props);
-
     const { push } = useHistory();
+    const web3Capable = useSelector((state) => state.connection.web3Capable);
+    const [anchorEl, setAnchorEl] = useState(null);
+
+    const handlePopoverOpen = (event) => {
+        if (!web3Capable) {
+            setAnchorEl(event.currentTarget);
+        }
+    };
+
+    const handlePopoverClose = () => {
+        setAnchorEl(null);
+    };
+
+    const open = Boolean(anchorEl);
 
     return (
         <React.Fragment>
@@ -38,7 +62,20 @@ export default function Home(props) {
                         <Typography variant="overline" component="span">Welcome to CryptoCerts</Typography>
                         <Typography variant="h3" component="h2">A decentralized academic certificate registry for the Web3</Typography>
                         <Box mt={4}>
-                            <Button color="primary" endIcon={<ArrowRightAltIcon />} onClick={() => push('/validate')} >Validate a document</Button>
+                            <span
+                                className={classes.validateButtonWrapper}
+                                onMouseEnter={handlePopoverOpen}
+                                onMouseLeave={handlePopoverClose}
+                            >
+                                <Button
+                                    color="primary"
+                                    endIcon={<ArrowRightAltIcon />}
+                                    onClick={() => push('/validate')}
+                                    disabled={!web3Capable}
+                                >
+                                    Validate a document
+                            </Button>
+                            </span>
                         </Box>
                     </Box>
                 </Container>
@@ -72,6 +109,27 @@ export default function Home(props) {
                     </Box>
                 </Container>
             </section>
+            <Popover
+                id="mouse-over-popover"
+                className={classes.popover}
+                classes={{
+                    paper: classes.paper,
+                }}
+                open={open}
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'center',
+                }}
+                transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'center',
+                }}
+                onClose={handlePopoverClose}
+                disableRestoreFocus
+            >
+                <Typography>Requires a Web3 provider installed</Typography>
+            </Popover>
         </React.Fragment>
     );
 }
