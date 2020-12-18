@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import ipfsClient from 'ipfs-http-client';
 import prettyBytes from 'pretty-bytes';
 import { IPFS_CONNECTION_DETAILS } from '../config';
+import { saveAs } from 'file-saver';
 
 export const useIpfs = function () {
 
@@ -40,5 +41,21 @@ export const useIpfs = function () {
         return await addToIpfs(file, { onlyHash: true });
     }
 
-    return { ipfsState, addToIpfs, getCid };
+    function getDownloadLink(cid) {
+        return IPFS_CONNECTION_DETAILS + "/api/v0/get?arg=" + cid;
+    }
+
+    async function downloadPdfFromIpfs(cid, filename) {
+        let url = getDownloadLink(cid);
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        fetch(url, {
+            method: 'POST',
+            headers: headers
+        })
+        .then(res => res.blob())
+        .then(blob => saveAs(blob, filename));
+    }
+
+    return { ipfsState, addToIpfs, getCid, getDownloadLink, downloadPdfFromIpfs };
 }
