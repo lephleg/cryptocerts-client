@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect } from 'react';
 import { Container, makeStyles, Box, Typography, Paper } from '@material-ui/core';
-import { fetchCertificates, selectAllUserCertificates } from '../features/certificates/certificatesSlice';
+import { fetchCertificates, selectAllUserCertificates } from '../redux/certificatesSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import MaterialCarousel from './MaterialCarousel';
 import CertificateCard from './CertificateCard';

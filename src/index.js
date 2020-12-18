@@ -7,7 +7,7 @@ import { ThemeProvider, unstable_createMuiStrictModeTheme } from '@material-ui/c
 import NotificationsProvider from './context/NotificationsProvider';
 import ConnectionProvider from './context/ConnectionProvider';
 import { Provider as ReduxProvider } from 'react-redux';
-import store from './store';
+import store from './redux/store';
 import { red } from '@material-ui/core/colors';
 
 const theme = unstable_createMuiStrictModeTheme({

@@ -3,7 +3,7 @@ import Container from '@material-ui/core/Container';
 import { Box, Button, makeStyles } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import { useDispatch } from 'react-redux';
-import { saveNewInstitution } from '../features/institutions/institutionsSlice';
+import { saveNewInstitution } from '../redux/institutionsSlice';
 import Web3 from 'web3';
 import Header from './Header';
 import { ConnectionContext, TRANSACTION_TYPE } from '../context/ConnectionProvider';

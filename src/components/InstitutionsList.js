@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect } from 'react';
 import { Box, Container, makeStyles, Typography, Paper } from '@material-ui/core';
-import { fetchInstitutions, selectAllInstitutions } from '../features/institutions/institutionsSlice';
+import { fetchInstitutions, selectAllInstitutions } from '../redux/institutionsSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import MaterialCarousel from './MaterialCarousel';
 import InstitutionCard from './InstitutionCard';

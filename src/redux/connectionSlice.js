@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import Web3 from 'web3';
-import { abi as CryptoCertsAbi } from '../../contracts/CryptoCerts.json';
-import { CRYPTOCERTS_CONTRACT_ADDRESS } from '../../config';
+import { abi as CryptoCertsAbi } from '../contracts/CryptoCerts.json';
+import { CRYPTOCERTS_CONTRACT_ADDRESS } from '../config';
 
 const web3 = new Web3(window.ethereum);
 const contract = new web3.eth.Contract(CryptoCertsAbi, CRYPTOCERTS_CONTRACT_ADDRESS);

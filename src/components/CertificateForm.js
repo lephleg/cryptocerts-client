@@ -3,7 +3,7 @@ import Container from '@material-ui/core/Container';
 import { Box, Button, makeStyles } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import { useDispatch } from 'react-redux';
-import { saveNewCertificate } from '../features/certificates/certificatesSlice';
+import { saveNewCertificate } from '../redux/certificatesSlice';
 import Web3 from 'web3';
 import { useIpfs } from '../hooks/useIpfs';
 import { DocumentDropzone } from './DocumentDropzone';

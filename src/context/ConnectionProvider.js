@@ -11,9 +11,9 @@ import {
     setWeb3Capable,
     setAdminAccount,
     determineRole
-} from '../features/connection/connectionSlice';
-import { fetchInstitutions } from '../features/institutions/institutionsSlice';
-import { fetchCertificates } from '../features/certificates/certificatesSlice';
+} from '../redux/connectionSlice';
+import { fetchInstitutions } from '../redux/institutionsSlice';
+import { fetchCertificates } from '../redux/certificatesSlice';
 import { CRYPTOCERTS_NETWORK_ID } from '../config';
 import { useCryptoCerts } from '../hooks/useCryptoCerts';
 

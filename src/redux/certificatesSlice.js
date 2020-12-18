@@ -5,9 +5,9 @@ import {
     createSelector,
 } from '@reduxjs/toolkit';
 import Web3 from 'web3';
-import { abi as CryptoCertsAbi } from '../../contracts/CryptoCerts.json';
-import { CRYPTOCERTS_CONTRACT_ADDRESS } from '../../config';
-import { getBytes32FromMultihash } from '../../utils/multihash';
+import { abi as CryptoCertsAbi } from '../contracts/CryptoCerts.json';
+import { CRYPTOCERTS_CONTRACT_ADDRESS } from '../config';
+import { getBytes32FromMultihash } from '../utils/multihash';
 
 const web3 = new Web3(window.ethereum);
 const contract = new web3.eth.Contract(CryptoCertsAbi, CRYPTOCERTS_CONTRACT_ADDRESS);
