@@ -32,7 +32,7 @@ export default function Web3AlertDialog() {
         title = "No Web3 provider detected";
         text = <DialogContentText id="alert-dialog-description">
             Your current browser is able to support Web3 capabilities, but <b>it requires an extension</b>.
-            Please consider installing <b><a href={"https://metamask.io/"} target="_blank" rel="noreferrer">MetaMask</a></b> in order to use <b>CryptoCerts</b>.
+            Please consider installing <b><a href={"https://metamask.io/"} target="_blank" rel="noreferrer">MetaMask</a></b> in order to use this decentralized application.
            </DialogContentText>;
     }
 
