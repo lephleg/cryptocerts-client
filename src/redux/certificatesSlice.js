@@ -98,6 +98,8 @@ export const selectAllUserCertificates = createSelector(
                 return certificates.filter(c => c.institution === activeAccount);
             case 'student':
                 return certificates.filter(c => c.student === activeAccount);
+            default:
+                return certificates;
         }
     }
 )
