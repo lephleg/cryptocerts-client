@@ -25,6 +25,10 @@ To use the packaged environment you will need [Docker Desktop](https://www.docke
     ```
     $ docker-compose up -d
     ```
+* Install contract dependencies using `npm` in the `truffle` container: 
+    ```
+    $ docker exec -it truffle npm install
+    ```
 * In order to compile and deploy the contracts in Ganache use:
     ```
     $ docker exec -it truffle truffle migrate
