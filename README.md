@@ -57,3 +57,20 @@ To use the packaged environment you will need [Docker Desktop](https://www.docke
 This repository was bootstrapped with [Create React App](https://github.com/facebook/create-react-app). 
 
 Check the documentation [here](https://github.com/lephleg/cryptocerts-client#available-scripts) for all the available scripts, which are still accessible in the `cryptocerts-client` container in the project root directory.
+
+## Reset the IPFS files
+
+In order to reset the IPFS files, stored from previous runs in your local IPFS node, use the following steps:
+
+* Remove the `ipfs` container:
+    ```
+    $ docker rm -f ipfs
+    ```
+* Remove any files located in the `client/ipfs` directory
+    ```
+    $ rm -rf client/ipfs
+    ```
+* While being in client project root, recreate the container:
+    ```
+    $ docker container up -d
+    ```
