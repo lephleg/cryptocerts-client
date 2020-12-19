@@ -1,70 +1,49 @@
-# Getting Started with Create React App
+# CryptoCerts Client
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This repository contains the web client application of CryptoCerts project, a decentralized academic certificate registry built on Ethereum. 
+
+This project is written in [Solidity](https://docs.soliditylang.org/) utilizing [Ganache CLI](https://docs.nethereum.com/en/latest/ethereum-and-clients/ganache-cli/), [Truffle](https://www.trufflesuite.com/truffle) and [IPFS](https://ipfs.io/), along with a [React](https://reactjs.org/) web client application with [Redux](https://redux.js.org/) and [web3.js](https://github.com/ethereum/web3.js/).
+
+For the smart contracts repository see [cryptocerts-contracts](https://github.com/lephleg/cryptocerts-contracts).
+
+## Setup Instructions using Docker
+
+### Prerequisites
+
+To use the packaged environment you will need [Docker Desktop](https://www.docker.com/products/docker-desktop) for your operating system. Please ensure [Docker Compose](https://docs.docker.com/compose/install/) is also available.
+
+### Steps
+* Clone the contracts repository into a directory:
+    ```
+    $ git clone git@github.com:lephleg/cryptocerts-contracts.git .
+    ```
+* Clone the client repository in a subdirectory named `client`:
+    ```
+    $ git clone git@github.com:lephleg/cryptocerts-client.git client
+    ```
+* While remaining at the root directory, execute the following command to spin up the `ganache-cli` and `truffle` containers:
+    ```
+    $ docker-compose up -d
+    ```
+* In order to compile and deploy the contracts in Ganache use:
+    ```
+    $ docker exec -it truffle truffle migrate
+    ```
+* Write down the address of the newly deployed CryptoCerts contract found in the output of the previous command.
+* Navigate to the `client` directory.
+* Make a copy of the `.env.example` configuration file named `.env.local`:
+    ```
+    $ cp .env.example .env.local
+    ```
+* Paste the address of the CryptoCerts contract as the value of the `REACT_APP_CRYPTOCERTS_CONTRACT_ADDRESS` key in `.env.local`.
+* While remaining in the `client` subdirectory spin up the `cryptocerts-client` application container along with the `ipfs` local node:
+    ```
+    $ docker-compose up -d
+    ```
+* Point your browser to http://localhost:3000 in order to access the web client application.
 
 ## Available Scripts
 
-In the project directory, you can run:
+This repository was bootstrapped with [Create React App](https://github.com/facebook/create-react-app). 
 
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Check the documentation [here](https://github.com/lephleg/cryptocerts-client#available-scripts) for all the available scripts, which are still accessible in the `cryptocerts-client` container in the project root directory.
