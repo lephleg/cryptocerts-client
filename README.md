@@ -27,7 +27,7 @@ To use the packaged environment you will need [Docker Desktop](https://www.docke
     ```
 * Install contract dependencies using `npm` in the `truffle` container: 
     ```
-    $ docker exec -it truffle npm install
+    $ docker exec -it truffle npm install --silent
     ```
 * In order to compile and deploy the contracts in Ganache use:
     ```
@@ -43,6 +43,12 @@ To use the packaged environment you will need [Docker Desktop](https://www.docke
 * While remaining in the `client` subdirectory spin up the `cryptocerts-client` application container along with the `ipfs` local node:
     ```
     $ docker-compose up -d
+    ```
+* Configure IPFS CORS policy to allow connections from localhost and restart container to apply the new configuration:
+    ```
+    $ docker exec -it ipfs ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin '["*"]'
+    $ docker exec -it ipfs ipfs config --json API.HTTPHeaders.Access-Control-Allow-Methods '["GET", "POST"]'
+    $ docker restart ipfs
     ```
 * Point your browser to http://localhost:3000 in order to access the web client application.
 
