@@ -72,5 +72,5 @@ In order to reset the IPFS files, stored from previous runs in your local IPFS n
     ```
 * While being in client project root, recreate the container:
     ```
-    $ docker container up -d
+    $ docker-compose up -d
     ```
