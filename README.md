@@ -56,7 +56,7 @@ To use the packaged environment you will need [Docker Desktop](https://www.docke
 
 This repository was bootstrapped with [Create React App](https://github.com/facebook/create-react-app). 
 
-Check the documentation [here](https://github.com/lephleg/cryptocerts-client#available-scripts) for all the available scripts, which are still accessible in the `cryptocerts-client` container in the project root directory.
+Check the documentation [here](https://create-react-app.dev/docs/available-scripts/) for all the available scripts, which are still accessible in the `cryptocerts-client` container in the project root directory.
 
 ## Reset the IPFS files
 
