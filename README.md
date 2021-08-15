@@ -50,7 +50,7 @@ To use the packaged environment you will need [Docker Desktop](https://www.docke
     $ docker exec -it ipfs ipfs config --json API.HTTPHeaders.Access-Control-Allow-Methods '["GET", "POST"]'
     $ docker restart ipfs
     ```
-* Point your browser to http://localhost:3000 in order to access the web client application.
+* Point your browser to http://localhost:3001 in order to access the web client application.
 
 ## Available Scripts
 
