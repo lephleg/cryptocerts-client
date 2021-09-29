@@ -60,7 +60,7 @@ export default function Home(props) {
                     <CardMedia className={classes.ethLogo} image={ethereum_logo} title="Ethereum diamond" />
                     <Box pt={4} pb={8} textAlign="center">
                         <Typography variant="overline" component="span">Welcome to CryptoCerts</Typography>
-                        <Typography variant="h3" component="h2">A decentralized academic certificate registry for the Web3</Typography>
+                        <Typography variant="h3" component="h2">A decentralized academic certificate registry for Web3</Typography>
                         <Box mt={4}>
                             <span
                                 className={classes.validateButtonWrapper}
@@ -90,7 +90,7 @@ export default function Home(props) {
                                     <Typography variant="h6" component="h3">Institutions</Typography>
                                 </Box>
                                 <Typography variant="body1" component="p">
-                                    Intistutions are able to issue and assign academic certificates to their students in an decentralized 
+                                    Institutions are able to issue and assign academic certificates to their students in an decentralized 
                                     and immutable way utilizing smart contracts running on the distributed ledger of the Ethereum blockchain.
                                 </Typography>
                             </Grid>
